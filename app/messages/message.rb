@@ -9,7 +9,7 @@ class Message < BinData::Record
     activation:       1,
     authentication:   2,
     device_settings:  3,
-    profile:          4,
+    temp_profile:     4,
     upgrade:          5,
     ack:              6,
     nack:             7,
