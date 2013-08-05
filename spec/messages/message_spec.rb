@@ -3,9 +3,9 @@ require 'message'
 
 describe Message do
 
-  let( :nack_message ){ [0xb3, 0xeb, 0x17, 0x07, 0xFF, 0xff].pack( 'c*' ) }
-  let( :ack_message ){ [0xb3, 0xeb, 0x17, 0x06, 0xFF, 0xff].pack( 'c*' ) }
-  let( :full_message ){ [0xb3, 0xeb, 0x17, 0x00, 0x00, 0x00, 0x00, 0x03, 0x00, 0x01, 0x02, 0xd0, 0x47].pack( 'c*' ) }
+  let( :nack_message ){ FactoryGirl.build( :nack_message ).to_binary_s }
+  let( :ack_message ){ FactoryGirl.build( :ack_message ).to_binary_s }
+  let( :full_message ){ FactoryGirl.build( :temperature_message ).to_binary_s }
 
   before { @message = Message.new }
 
@@ -26,7 +26,7 @@ describe Message do
     end
 
     it 'generates correct crc16' do
-      expect( @message.crc ).to eq 45998
+      expect( @message.crc ).to eq Crc.crc16( @message.to_binary_s[0...-2] )
     end
   end
 
@@ -34,11 +34,11 @@ describe Message do
     before { @message.read full_message }
 
     it 'has data length defined' do
-      expect( @message.data_length ).to eq 0x03
+      expect( @message.data_length ).to eq FactoryGirl.build( :temperature_message ).data_length
     end
 
     it 'has data defined' do
-      expect( @message.data ).to eq [0x00, 0x01, 0x02].pack( 'c*' )
+      expect( @message.data ).to eq FactoryGirl.build( :temperature_message ).data.to_binary_s
     end
   end
 
