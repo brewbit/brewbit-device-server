@@ -8,6 +8,8 @@ gem 'rest-client'
 gem 'multi_json'
 gem 'eventmachine'
 gem 'bindata'
+gem 'sinatra'
+gem 'thin'
 
 gem 'rspec'
 gem 'factory_girl'

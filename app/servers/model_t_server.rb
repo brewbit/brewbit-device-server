@@ -32,7 +32,9 @@ class ModelTServer < EM::Connection
     send_message response_message
   end
 
-  private
+  def self.devices
+    @@connected_devices
+  end
 
   def send_message( message )
     send_data message.to_binary_s

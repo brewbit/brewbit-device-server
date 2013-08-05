@@ -29,11 +29,15 @@ class MessageHandler
 
   def process_version( data )
     @version = data
+
+    # TODO Send data to server & get response
+
     MessageBuilder.build Message::MESSAGE_TYPES[:ack]
   end
 
   def process_temperature( data )
-    # Send data to server
+    # TODO Send data to server & get response
+
     MessageBuilder.build Message::MESSAGE_TYPES[:ack]
   end
 end
