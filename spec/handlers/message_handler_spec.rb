@@ -5,6 +5,7 @@ describe MessageHandler do
   let( :version_message ){ FactoryGirl.build :version_message }
   let( :temperature_message ){ FactoryGirl.build :temperature_message }
   let( :ack_message ){ FactoryGirl.build :ack_message }
+  let( :nack_message ){ FactoryGirl.build :nack_message }
 
   before { @handler = MessageHandler.new }
 
@@ -30,13 +31,25 @@ describe MessageHandler do
       end
 
       context 'when version is set' do
-        before { @handler.process version_message }
-
         it 'saves the temperature and acks the request' do
           result = @handler.process temperature_message
           expect( result ).to eq ack_message
         end
       end
+    end
+  end
+
+  describe 'ack' do
+    it 'returns false' do
+      result = @handler.process ack_message
+      expect( result ).to eq false
+    end
+  end
+
+  describe 'nack' do
+    it 'returns false' do
+      result = @handler.process nack_message
+      expect( result ).to eq false
     end
   end
 end

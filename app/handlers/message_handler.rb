@@ -10,6 +10,10 @@ class MessageHandler
     result = ''
 
     case message.message_type
+    when Message::MESSAGE_TYPES[:ack]
+      result = false
+    when Message::MESSAGE_TYPES[:nack]
+      result = false
     when Message::MESSAGE_TYPES[:version]
       result = process_version message.data
     when Message::MESSAGE_TYPES[:temperature]

@@ -29,7 +29,7 @@ class ModelTServer < EM::Connection
       response_message = MessageBuilder.build Message::MESSAGE_TYPES[:nack]
     end
 
-    send_message response_message
+    send_message response_message unless response_message == false
   end
 
   def self.devices
