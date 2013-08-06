@@ -10,6 +10,8 @@ class WebServer < Sinatra::Base
   post '/temperature_profile' do
     data = request.body.read
 
+    puts "Recieved JSON Data: #{data}"
+
     halt 400 if data.nil?
 
     EM.defer do

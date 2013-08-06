@@ -37,6 +37,8 @@ class ModelTServer < EM::Connection
   end
 
   def send_message( message )
+    puts "Sending Message to device: #{message.inspect}"
+
     send_data message.to_binary_s
   end
 end
