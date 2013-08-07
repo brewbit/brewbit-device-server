@@ -35,12 +35,16 @@ class MessageHandler
     @version = data
 
     # TODO Send data to server & get response
+    puts "Sending to BrewBit.com: version - #{version}"
 
     MessageBuilder.build Message::MESSAGE_TYPES[:ack]
   end
 
   def process_temperature( data )
     # TODO Send data to server & get response
+    temp_data = TemperatureData.new
+    temp_info = temp_data.read data
+    puts "Sending to BrewBit.com: temperature - #{temp_info}"
 
     MessageBuilder.build Message::MESSAGE_TYPES[:ack]
   end

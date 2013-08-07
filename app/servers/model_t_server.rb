@@ -19,7 +19,9 @@ class ModelTServer < EM::Connection
   def receive_data( data )
     response_message = ''
 
-    if DataValidator.valid? data
+    # data is being escaped for some reason
+
+    if true #DataValidator.valid? data # need to reverse CRC bytes to match little endian
       message = Message.new
       message.read data
 
