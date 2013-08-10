@@ -1,6 +1,7 @@
 require 'message'
 require 'data_validator'
 require 'message_builder'
+require 'message_handler'
 
 class ModelTServer < EM::Connection
 
@@ -25,8 +26,8 @@ class ModelTServer < EM::Connection
       message = Message.new
       message.read data
 
-      @handler = MessageHandler.new message
-      response_message = @handler.process
+      @handler = MessageHandler.new
+      response_message = @handler.process message
     else
       response_message = MessageBuilder.build Message::MESSAGE_TYPES[:nack]
     end
