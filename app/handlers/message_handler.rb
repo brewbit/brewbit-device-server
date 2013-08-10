@@ -1,4 +1,5 @@
 require 'message'
+require 'temperature_data'
 
 class MessageHandler
 

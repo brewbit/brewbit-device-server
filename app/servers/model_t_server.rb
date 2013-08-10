@@ -1,6 +1,7 @@
 require 'message'
 require 'data_validator'
 require 'message_builder'
+require 'message_handler'
 
 class ModelTServer < EM::Connection
 
@@ -19,14 +20,14 @@ class ModelTServer < EM::Connection
   def receive_data( data )
     response_message = ''
 
-    # data is being escaped for some reason
+    message = Message.new
+    message.read data
 
-    if true #DataValidator.valid? data # need to reverse CRC bytes to match little endian
-      message = Message.new
-      message.read data
+    puts "Received message: #{message.inspect}"
 
-      @handler = MessageHandler.new message
-      response_message = @handler.process
+    if true # DataValidator.valid? data # need to reverse CRC bytes to match little endian
+      @handler = MessageHandler.new
+      response_message = @handler.process message
     else
       response_message = MessageBuilder.build Message::MESSAGE_TYPES[:nack]
     end

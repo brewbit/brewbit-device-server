@@ -7,6 +7,9 @@ class DataValidator
 
     calculated_crc = calculate_crc data
 
+    puts "Buffer CRC: #{buffer_crc}"
+    puts "Calculated CRC: #{calculated_crc}"
+
     buffer_crc == calculated_crc
   end
 
