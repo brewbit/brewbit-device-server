@@ -25,7 +25,7 @@ class ModelTServer < EM::Connection
 
     puts "Received message: #{message.inspect}"
 
-    if true # DataValidator.valid? data # need to reverse CRC bytes to match little endian
+    if DataValidator.valid? data
       @handler = MessageHandler.new
       response_message = @handler.process message
     else
