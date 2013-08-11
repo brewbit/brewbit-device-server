@@ -55,7 +55,7 @@ class MessageHandler
     b = {
       device_id: "e52025ca044067a862c7ff79293b10830ee0dec5",
       probe: probe_type,
-      value: temp_data.temperature,
+      value: temp_data.temperature.round(2),
       auth_token: "TyfyJUjJSm6PdB9xGbsk"
     }.to_json
 
