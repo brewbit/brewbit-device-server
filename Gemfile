@@ -10,6 +10,7 @@ gem 'eventmachine'
 gem 'bindata'
 gem 'sinatra'
 gem 'thin'
+gem 'httparty'
 
 gem 'rspec'
 gem 'factory_girl'
