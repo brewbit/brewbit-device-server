@@ -3,7 +3,9 @@ require 'message'
 FactoryGirl.define do
 
   trait :start_message do
-    start_message 11791127
+    sync1 179
+    sync2 235
+    sync3 23
   end
 
   factory :message do

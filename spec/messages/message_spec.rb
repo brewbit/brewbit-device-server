@@ -11,7 +11,9 @@ describe Message do
 
   subject { @message }
 
-  it { should respond_to :start_message }
+  it { should respond_to :sync1 }
+  it { should respond_to :sync2 }
+  it { should respond_to :sync3 }
   it { should respond_to :message_type }
   it { should respond_to :data_length }
   it { should respond_to :data }
