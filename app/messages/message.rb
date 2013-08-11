@@ -33,7 +33,7 @@ class Message < BinData::Record
   end
 
   def build_crc
-    buffer = self.to_binary_s[0...-2]
+    buffer = self.to_binary_s[3...-2]
     self.crc = Crc.crc16 buffer
   end
 end
