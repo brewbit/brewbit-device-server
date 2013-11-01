@@ -2,6 +2,19 @@
 Device server that acts as an API translation layer between raw TCP
 socket binary protocol for devices and JSON API for the Rails app.
 
+##### Table of Contents
+
+* [Server](#server)
+* [Vagrant](#vagrant)
+* [Message Format](#message_format)
+  * [API Version](#api_version)
+  * [Activation](#activation)
+  * [Device Status](#device_status)
+  * [Device Settings](#device_settings)
+  * [Temperature Profiles](#temp_profile)
+* [Error Codes](#error_codes)
+
+<a name='server'>
 # Server
 
 Configurtion is in `config.rb`
@@ -13,6 +26,7 @@ Settings are:
 * WEB\_PORT - Port that accepts web calls for REST API
 * ENDIAN - Endianness of the binary protocol
 
+<a name='vagrant'>
 # To Use Vagrant for development
 
 ## Setup
@@ -43,6 +57,7 @@ At this point the server is running on ports defined in `config.rb`
 
 You can make connections to localshot:<port>
 
+<a name='message_format'>
 # Message Format
 
 ```
@@ -52,6 +67,7 @@ You can make connections to localshot:<port>
 
 # Message Flow
 
+<a name='api_version'>
 ## API Version
 
 Device specifies which API version it supports
@@ -88,6 +104,7 @@ Device specifies which API version it supports
 | 128 Bytes |   4 Bytes   |
 ```
 
+<a name='activation'>
 ## Activation
 
 Activation flow for the device
@@ -144,6 +161,7 @@ A unique activation token that experies after a short time.
 
 A unique authentication token specific to the user's account
 
+<a name='device_status'>
 ## Device Status
 Provides current temperature and device status, e.g. WiFi signal
 strength
@@ -174,7 +192,7 @@ strength
     |                                                          |
 ```
 
-### Setting Packet
+### Status Packet
 
 ```
 | AUTHENTICATION TOKEN | DEVICE ID | TIMESTAMP |  SETTINGS DATA  |
@@ -191,6 +209,7 @@ PROBE TEMPERATURE VALUE 1   | Float
 PROBE TEMPERATURE VALUE N   | Float
 ```
 
+<a name='device_settings'>
 ## Device Settings
 Provides getting and setting device settings.
 
@@ -271,6 +290,7 @@ OUTPUT 2 SETPOINT         | Float
 OUTPUT 2 COMPRESSOR DELAY | Float
 ```
 
+<a name='temp_profiles'>
 ## Temperature Profiles
 
 Sending temperature profiles to the device
@@ -322,6 +342,7 @@ POINT N TRANSITION TYPE | 1 Byte
 POINT N TEMPERATURE     | Float
 ```
 
+<a name='error_codes'>
 # Error Codes
 
 :TODO:
