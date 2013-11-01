@@ -63,7 +63,13 @@ You can make connections to localshot:<port>
 
 ```
 | START_MESSAGE | MESSAGE_TYPE | DATA_LENGTH |   DATA   |   CRC   |
-|    3 Bytes    |   1 Byte     |  4 Bytes    | Variable | 2 Bytes |
+|      U24      |       U8     |      U32    | Variable |   U16   |
+```
+
+### Message Types
+
+```
+:TODO:
 ```
 
 <a name='message_flow'>
@@ -88,7 +94,7 @@ Device specifies which API version it supports
     |                                                          |
     |                 Server Responds with ACK                 |
     |<--------------------------------------------------------+|
-    |               Data: { ACK, Response Code }               |
+    |               Data: { Response Code }                    |
     |                                                          |
 ```
 
@@ -96,7 +102,18 @@ Device specifies which API version it supports
 
 ```
 | Device ID | API VERSION |
-| 128 Bytes |   4 Bytes   |
+|    U64    |       U8    |
+```
+
+<a name='ack'>
+## ACK
+Response packet with response code
+
+### ACK Packet
+
+```
+| RESPONSE CODE |
+|      U32      |
 ```
 
 <a name='activation'>
@@ -133,7 +150,7 @@ Activation flow for the device
 
 ```
 | DEVICE ID |
-| 128 Bytes |
+|    U64    |
 ```
 
 A unique identifier for that device.
@@ -142,7 +159,7 @@ A unique identifier for that device.
 
 ```
 | ACTIVATION TOKEN |
-|      6 Bytes     |
+|       U48        |
 ```
 
 A unique activation token that experies after a short time.
@@ -151,7 +168,7 @@ A unique activation token that experies after a short time.
 
 ```
 | AUTHENTICATION TOKEN |
-|        20 Bytes      |
+|        U160          |
 ```
 
 A unique authentication token specific to the user's account
@@ -185,17 +202,17 @@ strength
 
 ```
 | AUTHENTICATION TOKEN | DEVICE ID | TIMESTAMP |  SETTINGS DATA  |
-|       20 Bytes       | 128 Bytes |  4 Bytes  | Variable Length |
+|          U160        |    U64    |    U32    | Variable Length |
 ```
 
 #### Status Info
 
 ```
-WIFI STRENGTH               | Float
-NUMBER OF PROBES            | 4 Bytes
-PROBE TEMPERATURE VALUE 1   | Float
+WIFI STRENGTH               | U32 (Scaled Integer, 100 factor)
+NUMBER OF PROBES            | U32
+PROBE TEMPERATURE VALUE 1   | U32 (Scaled Integer, 100 factor)
 ...
-PROBE TEMPERATURE VALUE N   | Float
+PROBE TEMPERATURE VALUE N   | U32 (Scaled Integer, 100 factor)
 ```
 
 <a name='device_settings'>
@@ -245,23 +262,23 @@ Provides getting and setting device settings.
 
 ```
 | AUTHENTICATION TOKEN | DEVICE ID | TIMESTAMP |  SETTINGS DATA  |
-|       20 Bytes       | 128 Bytes |  4 Bytes  | Variable Length |
+|          U160        |    U64    |    U32    | Variable Length |
 ```
 
 #### Settings data
 
 ```
-DEVICE NAME LENGTH        | 1 Byte
+DEVICE NAME LENGTH        | U8
 DEVICE NAME               | String, 100 chars max
-TEMPERATURE SCALE         | 1 Byte
-OUTPUT 1 FUNCTION         | 1 Byte
-OUTPUT 1 TRIGGER (SENSOR) | 1 Byte
-OUTPUT 1 SETPOINT         | Float
-OUTPUT 1 COMPRESSOR DELAY | Float
-OUTPUT 2 FUNCTION         | 1 Byte
-OUTPUT 2 TRIGGER (SENSOR) | 1 Byte
-OUTPUT 2 SETPOINT         | Float
-OUTPUT 2 COMPRESSOR DELAY | Float
+TEMPERATURE SCALE         | U8
+OUTPUT 1 FUNCTION         | U8
+OUTPUT 1 TRIGGER (SENSOR) | U8
+OUTPUT 1 SETPOINT         | U32 (Scaled Integer, 100 factor)
+OUTPUT 1 COMPRESSOR DELAY | U32 (Scaled Integer, 100 factor)
+OUTPUT 2 FUNCTION         | U8
+OUTPUT 2 TRIGGER (SENSOR) | U8
+OUTPUT 2 SETPOINT         | U32 (Scaled Integer, 100 factor)
+OUTPUT 2 COMPRESSOR DELAY | U32 (Scaled Integer, 100 factor)
 ```
 
 <a name='temp_profiles'>
@@ -292,22 +309,22 @@ Sending temperature profiles to the device
 
 ```
 | AUTHENTICATION TOKEN | DEVICE ID | TIMESTAMP |  TEMPERATURE PROFILE  |
-|       20 Bytes       | 128 Bytes |  4 Bytes  |    Variable Length    |
+|          U160        |    U64    |    U32    |    Variable Length    |
 ```
 
 ### Temperature Profile Data
 ```
-PROFILE NAME LENGTH     | 1 Byte
+PROFILE NAME LENGTH     | U8
 PROFILE NAME            | String, 100 chars max
-PROFILE TYPE            | 1 Byte
-NUMBER OF POINTS        | 64 Bytes
-POINT 1 OFFSET          | 64 Bytes
-POINT 1 TRANSITION TYPE | 1 Byte
-POINT 1 TEMPERATURE     | Float
+PROFILE TYPE            | U8
+NUMBER OF POINTS        | U32
+POINT 1 OFFSET          | U32
+POINT 1 TRANSITION TYPE | U8
+POINT 1 TEMPERATURE     | U32 (Scaled Integer, 100 factor)
 ...
-POINT N OFFSET          | 64 Bytes
-POINT N TRANSITION TYPE | 1 Byte
-POINT N TEMPERATURE     | Float
+POINT N OFFSET          | U32
+POINT N TRANSITION TYPE | U8
+POINT N TEMPERATURE     | U32 (Scaled Integer, 100 factor)
 ```
 
 <a name='response_codes'>
