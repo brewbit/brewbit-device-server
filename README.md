@@ -7,11 +7,12 @@ socket binary protocol for devices and JSON API for the Rails app.
 * [Server](#server)
 * [Vagrant](#vagrant)
 * [Message Format](#message_format)
+* [Message Flow](#message_flow)
   * [API Version](#api_version)
   * [Activation](#activation)
   * [Device Status](#device_status)
   * [Device Settings](#device_settings)
-  * [Temperature Profiles](#temp_profile)
+  * [Temperature Profiles](#temp_profiles)
 * [Error Codes](#error_codes)
 
 <a name='server'>
@@ -65,6 +66,7 @@ You can make connections to localshot:<port>
 |    3 Bytes    |   1 Byte     |  4 Bytes    | Variable | 2 Bytes |
 ```
 
+<a name='message_flow'>
 # Message Flow
 
 <a name='api_version'>
