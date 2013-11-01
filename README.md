@@ -13,7 +13,7 @@ socket binary protocol for devices and JSON API for the Rails app.
   * [Device Status](#device_status)
   * [Device Settings](#device_settings)
   * [Temperature Profiles](#temp_profiles)
-* [Error Codes](#error_codes)
+* [Response Codes](#response_codes)
 
 <a name='server'>
 # Server
@@ -86,16 +86,9 @@ Device specifies which API version it supports
     |+-------------------------------------------------------->|
     |          Data: { Device Id, Version }                    |
     |                                                          |
-    |                                                          |
-    |             Server Responds with ACK on Success          |
+    |                 Server Responds with ACK                 |
     |<--------------------------------------------------------+|
-    |                      Data: { ACK }                       |
-    |                                                          |
-    |                                                          |
-    |        Server Responds with NACK & Error Code on Error   |
-    |<--------------------------------------------------------+|
-    |                 Data: { NACK, error code }               |
-    |                                                          |
+    |               Data: { ACK, Response Code }               |
     |                                                          |
 ```
 
@@ -182,15 +175,9 @@ strength
     |                  timestamp, status info }                |
     |                                                          |
     |                                                          |
-    |             Server Responds with ACK on Success          |
+    |                 Server Responds with ACK                 |
     |<--------------------------------------------------------+|
-    |                      Data: { ACK }                       |
-    |                                                          |
-    |                                                          |
-    |        Server Responds with NACK & Error Code on Error   |
-    |<--------------------------------------------------------+|
-    |                 Data: { NACK, error code }               |
-    |                                                          |
+    |               Data: { ACK, Response Code }               |
     |                                                          |
 ```
 
@@ -198,7 +185,7 @@ strength
 
 ```
 | AUTHENTICATION TOKEN | DEVICE ID | TIMESTAMP |  SETTINGS DATA  |
-|       20 Bytes       | 128 Bytes |   Float   | Variable Length |
+|       20 Bytes       | 128 Bytes |  4 Bytes  | Variable Length |
 ```
 
 #### Status Info
@@ -230,16 +217,9 @@ Provides getting and setting device settings.
     |          Data: { authentication token, device id,        |
     |                  timestamp, settings }                   |
     |                                                          |
-    |                                                          |
-    |             Server Responds with ACK on Success          |
+    |                 Server Responds with ACK                 |
     |<--------------------------------------------------------+|
-    |                      Data: { ACK }                       |
-    |                                                          |
-    |                                                          |
-    |        Server Responds with NACK & Error Code on Error   |
-    |<--------------------------------------------------------+|
-    |                 Data: { NACK, error code }               |
-    |                                                          |
+    |               Data: { ACK, Response Code }               |
     |                                                          |
 ```
 
@@ -255,17 +235,9 @@ Provides getting and setting device settings.
     |          Data: { authentication token, device id,        |
     |                  timestamp, settings }                   |
     |                                                          |
-    |                                                          |
-    |                                                          |
-    |             Device Responds with ACK on Success          |
+    |                 Server Responds with ACK                 |
     |<--------------------------------------------------------+|
-    |                      Data: { ACK }                       |
-    |                                                          |
-    |                                                          |
-    |        Device Responds with NACK & Error Code on Error   |
-    |<--------------------------------------------------------+|
-    |                 Data: { NACK, error code }               |
-    |                                                          |
+    |               Data: { ACK, Response Code }               |
     |                                                          |
 ```
 
@@ -273,7 +245,7 @@ Provides getting and setting device settings.
 
 ```
 | AUTHENTICATION TOKEN | DEVICE ID | TIMESTAMP |  SETTINGS DATA  |
-|       20 Bytes       | 128 Bytes |   Float   | Variable Length |
+|       20 Bytes       | 128 Bytes |  4 Bytes  | Variable Length |
 ```
 
 #### Settings data
@@ -310,15 +282,9 @@ Sending temperature profiles to the device
     |       Data: { Auth Token, Device ID,                     |
     |               Timestamp, Temperature Profile Data }      |
     |                                                          |
-    |             Device Responds with ACK on Success          |
+    |                 Server Responds with ACK                 |
     |<--------------------------------------------------------+|
-    |                      Data: { ACK }                       |
-    |                                                          |
-    |                                                          |
-    |        Device Responds with NACK & Error Code on Error   |
-    |<--------------------------------------------------------+|
-    |                 Data: { NACK, error code }               |
-    |                                                          |
+    |               Data: { ACK, Response Code }               |
     |                                                          |
 ```
 
@@ -326,7 +292,7 @@ Sending temperature profiles to the device
 
 ```
 | AUTHENTICATION TOKEN | DEVICE ID | TIMESTAMP |  TEMPERATURE PROFILE  |
-|       20 Bytes       | 128 Bytes |   Float   |    Variable Length    |
+|       20 Bytes       | 128 Bytes |  4 Bytes  |    Variable Length    |
 ```
 
 ### Temperature Profile Data
@@ -344,8 +310,11 @@ POINT N TRANSITION TYPE | 1 Byte
 POINT N TEMPERATURE     | Float
 ```
 
-<a name='error_codes'>
-# Error Codes
+<a name='response_codes'>
+# Response Codes
 
-:TODO:
+```
+SUCCESS                     | 0
+ACTIVATION TOKEN NOT FOUND  | 1
+```
 
