@@ -61,7 +61,6 @@ Device specifies which API version it supports
 ```
 
   Device                                                 Device Server
-
     +                                                          +
     |                                                          |
     |                                                          |
@@ -97,7 +96,6 @@ Activation flow for the device
 
 ```
   Device                                                 Device Server
-
     +                                                          +
     |         Device Sends Request For Activation Token        |
     |+-------------------------------------------------------->|
@@ -155,7 +153,6 @@ strength
 ```
 
   Device                                                 Device Server
-
     +                                                          +
     |                                                          |
     |                                                          |
@@ -204,7 +201,6 @@ Provides getting and setting device settings.
 ```
 
   Device                                                 Device Server
-
     +             Device Information From Device               +
     |                                                          |
     |                                                          |
@@ -230,7 +226,6 @@ Provides getting and setting device settings.
 
 ```
   Device                                                 Device Server
-
     +               User Makes Changes On Server               +
     |                                                          |
     |                                                          |
@@ -285,7 +280,6 @@ Sending temperature profiles to the device
 ```
 
   Device                                                 Device Server
-
     +                                                          +
     |                                                          |
     |                                                          |
@@ -330,24 +324,5 @@ POINT N TEMPERATURE     | Float
 
 # Error Codes
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+:TODO:
 
