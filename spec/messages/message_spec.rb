@@ -1,13 +1,25 @@
 require 'spec_helper'
 require 'message'
+require 'bindata'
+
+class TestData < BinData::Record
+  endian ENDIAN
+  uint8   :point1
+  uint16  :point2
+end
 
 describe Message do
 
-  let( :nack_message ){ FactoryGirl.build( :nack_message ).to_binary_s }
-  let( :ack_message ){ FactoryGirl.build( :ack_message ).to_binary_s }
-  let( :full_message ){ FactoryGirl.build( :temperature_message ).to_binary_s }
+  before do
+    t = TestData.new
+    t.point1 = 15
+    t.point2 = 32
 
-  before { @message = Message.new }
+    @message = Message.new
+    @message.message_type = Message::MESSAGE_TYPES[:ack]
+    @message.data_length = 10
+    @message.data = t.to_binary_s
+  end
 
   subject { @message }
 
@@ -18,53 +30,51 @@ describe Message do
   it { should respond_to :data_length }
   it { should respond_to :data }
   it { should respond_to :crc }
+  it { should respond_to :valid? }
+  it { should respond_to :build_crc }
+  it { should respond_to :has_data? }
 
   describe 'build_crc' do
     before do
-      @message.message_type = Message::MESSAGE_TYPES[:version]
-      @message.data_length = 11
-      @message.data = 'abcabcabcav'
       @message.build_crc
     end
 
-    it 'generates correct crc16' do
-      expect( @message.crc ).to eq Crc.crc16( @message.to_binary_s[0...-2] )
+    it 'stores CRC16 in crc field' do
+      @message.crc.should eq 64419
     end
   end
 
-  describe 'regular message' do
-    before { @message.read full_message }
+  describe 'valid?' do
+    context 'for good crc is true' do
+      before do
+        @message.build_crc
+      end
 
-    it 'has data length defined' do
-      expect( @message.data_length ).to eq FactoryGirl.build( :temperature_message ).data_length
+      it { should be_valid }
     end
 
-    it 'has data defined' do
-      expect( @message.data ).to eq FactoryGirl.build( :temperature_message ).data.to_binary_s
-    end
-  end
+    context 'for bad crc is false' do
+      before do
+        @message.crc = 1111
+      end
 
-  describe 'ack message' do
-    before { @message.read ack_message }
-
-    it 'has data length of 0' do
-      expect( @message.data_length ).to eq 0
-    end
-
-    it 'has data set to be empty' do
-      expect( @message.data ).to eq ""
+      it { should_not be_valid }
     end
   end
 
-  describe 'nack message' do
-    before { @message.read nack_message }
-
-    it 'has data length of 0' do
-      expect( @message.data_length ).to eq 0
+  describe 'has_data?' do
+    context 'with data length not 0 and data not empty' do
+      it 'returns true' do
+        @message.has_data?.should be_true
+      end
     end
 
-    it 'has data set to be empty' do
-      expect( @message.data ).to eq ""
+    context 'with data length 0' do
+      before { @message.data_length = 0 }
+
+      it 'returns false' do
+        @message.has_data?.should be_false
+      end
     end
   end
 end

@@ -11,8 +11,12 @@ gem 'bindata'
 gem 'sinatra'
 gem 'thin'
 gem 'httparty'
+gem 'digest-crc'
 
+gem 'guard', '~> 2.2.2'
+gem 'guard-rspec'
 gem 'rspec'
+gem 'em-spec'
 gem 'factory_girl'
 gem 'debugger'
 

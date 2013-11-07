@@ -1,35 +1,32 @@
 require 'message'
-require 'data_validator'
-require 'message_builder'
-require 'message_handler'
+require 'binary_message_builder'
+require 'binary_message_handler'
 
 class ModelTServer < EM::Connection
 
   @@connected_devices = Array.new
 
   def post_init
-    puts 'device connected'
+    #puts 'device connected'
     @@connected_devices.push self
+    @handler = BinaryMessageHandler.new
+    @message = Message.new
   end
 
   def unbind
     @@connected_devices.delete self
-    puts 'device disconnected'
+    #puts 'device disconnected'
   end
 
   def receive_data( data )
-    response_message = ''
+    response_message = false
 
-    message = Message.new
-    message.read data
+    @message.read data
 
-    puts "Received message: #{message.inspect}"
-
-    if DataValidator.valid? data
-      @handler = MessageHandler.new
-      response_message = @handler.process message
+    if @message.valid?
+      response_message = @handler.process message, self
     else
-      response_message = MessageBuilder.build Message::MESSAGE_TYPES[:nack]
+      response_message = failed_crc_message
     end
 
     send_message response_message unless response_message == false
@@ -39,10 +36,14 @@ class ModelTServer < EM::Connection
     @@connected_devices
   end
 
-  def send_message( message )
-    puts "Sending Message to device: #{message.inspect}"
+  private
 
+  def send_message( message )
     send_data message.to_binary_s
+  end
+
+  def failed_crc_message
+    BinaryMessageBuilder.build Message::MESSAGE_TYPES[:ack], Message::ERROR_CODES[:crc_failed]
   end
 end
 
