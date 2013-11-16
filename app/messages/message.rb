@@ -6,14 +6,17 @@ class Message < BinData::Record
   SYNC3 = 0x17
 
   MESSAGE_TYPES = {
-    ack:              0,
-    api_version:      1,
-    activation:       2,
-    authentication:   3,
-    device_status:    4,
-    device_settings:  5,
-    temp_profile:     6,
-    upgrade:          7
+    response:                       0,
+    api_version:                    1,
+    activation_token_request:       2,
+    activation_token_response:      3,
+    authentication_token_request:   4,
+    authentication_token_response:  5,
+    authentication_request:         6,
+    device_status:                  7,
+    device_settings:                8,
+    temperature_profile:            9,
+    upgrade:                        10
   }
 
   ERROR_CODES = {

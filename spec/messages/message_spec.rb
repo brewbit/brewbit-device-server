@@ -16,7 +16,7 @@ describe Message do
     t.point2 = 32
 
     @message = Message.new
-    @message.message_type = Message::MESSAGE_TYPES[:ack]
+    @message.message_type = Message::MESSAGE_TYPES[:response]
     @message.data_length = 10
     @message.data = t.to_binary_s
   end
