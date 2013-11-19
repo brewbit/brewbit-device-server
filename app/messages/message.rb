@@ -26,8 +26,10 @@ class Message < BinData::Record
     api_version_not_supported:      3,
     device_not_found:               4,
     bad_authentication_token:       5,
-    authentication_successful:      6,
-    failed_to_get_activation_token: 7
+    activation_token_expired:       6,
+    bad_activation_token:           7,
+    authentication_successful:      8,
+    failed_to_get_activation_token: 9
   }
 
   endian ENDIAN
