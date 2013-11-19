@@ -10,3 +10,4 @@ ENDIAN = :little
 $: << File.join( ROOT_PATH, '.' )
 $LOAD_PATH.unshift *Dir.glob( File.expand_path( './app/**/*' ) )
 $: << File.join( ROOT_PATH, 'lib' )
+$: << File.join( ROOT_PATH, 'app' )

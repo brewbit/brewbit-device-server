@@ -16,6 +16,10 @@ class BinaryMessageBuilder
     message
   end
 
+  def self.build_failed_crc_message
+    self.build_response_message Message::ERROR_CODES[:crc_failed]
+  end
+
   private
 
   def self.build_response_message( data )

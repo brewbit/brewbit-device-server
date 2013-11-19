@@ -148,7 +148,8 @@ The device requests the authentication token from the server.
 
 #### Packet Contents
 ```
-No data is needed, send empty packet
+| ACTIVATION TOKEN |
+|       U48        |
 ```
 
 #### Expected Response(s)

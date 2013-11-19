@@ -20,12 +20,14 @@ class Message < BinData::Record
   }
 
   ERROR_CODES = {
-    success:                      0,
-    activation_token_not_found:   1,
-    crc_failed:                   2,
-    api_version_not_supported:    3,
-    device_not_found:             4,
-    bad_authentication_token:     5
+    success:                        0,
+    activation_token_not_found:     1,
+    crc_failed:                     2,
+    api_version_not_supported:      3,
+    device_not_found:               4,
+    bad_authentication_token:       5,
+    authentication_successful:      6,
+    failed_to_get_activation_token: 7
   }
 
   endian ENDIAN
