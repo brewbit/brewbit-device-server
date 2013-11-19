@@ -101,15 +101,16 @@ Response packet with response code for general messages
 #### Response Codes
 
 ```
-SUCCESS                     | 0
-ACTIVATION TOKEN NOT FOUND  | 1
-CRC FAILED                  | 2
-API VERSION NOT SUPPORTED   | 3
-DEVICE NOT FOUND            | 4
-BAD AUTHENTICATION TOKEN    | 5
-ACTIVATION TOKEN EXPIRED    | 6
-BAD ACTIVATION TOKEN        | 7
-AUTHENTICATION SUCCESSFUL   | 8
+SUCCESS                         | 0
+ACTIVATION TOKEN NOT FOUND      | 1
+CRC FAILED                      | 2
+API VERSION NOT SUPPORTED       | 3
+DEVICE NOT FOUND                | 4
+BAD AUTHENTICATION TOKEN        | 5
+ACTIVATION TOKEN EXPIRED        | 6
+BAD ACTIVATION TOKEN            | 7
+AUTHENTICATION SUCCESSFUL       | 8
+FAILED TO GET ACTIVATION TOKEN  | 9
 ```
 
 <a name='activation_token_request'></a>
