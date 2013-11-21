@@ -11,7 +11,7 @@ describe ModelTResponder do
     @device.api_version = 1
     @device.authentication_token = 'kNf5UBtJpfRRUrq4zBLT'
     @activation_token = '123456'
-    @api_url = "#{ModelTResponder::BREWBIT_API_URL}/v#{@device.api_version}"
+    @api_url = "#{BREWBIT_API_URL}/v#{@device.api_version}"
 
     @responder = ModelTResponder.new( @device )
   end

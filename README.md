@@ -136,7 +136,7 @@ Server responds with the activation token to be used by the device.  Token expir
 #### Packet Contents
 ```
 | ACTIVATION TOKEN |
-|       U48        |
+|       U64        |
 ```
 
 #### Expected Response(s)
@@ -150,7 +150,7 @@ The device requests the authentication token from the server.
 #### Packet Contents
 ```
 | ACTIVATION TOKEN |
-|       U48        |
+|       U64        |
 ```
 
 #### Expected Response(s)

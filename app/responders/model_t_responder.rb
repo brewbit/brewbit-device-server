@@ -4,8 +4,6 @@ require 'json'
 class ModelTResponder
   include HTTParty
 
-  BREWBIT_API_URL = "http://brewbit.dev/api"
-
   class FailedToGetActivationToken < Exception ; end
   class ActivationTokenNotFound < Exception ; end
   class AuthenticationTokenNotFound < Exception ; end

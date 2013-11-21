@@ -14,7 +14,14 @@ class BinaryMessageHandler
   end
 
   def process( data )
-    message = Message.read( data )
+    message = nil
+
+    begin
+      message = Message.read( data )
+    rescue => e
+      puts e
+      return BinaryMessageBuilder.build_failed_crc_message
+    end
 
     return BinaryMessageBuilder.build_failed_crc_message unless message.valid?
 
