@@ -33,7 +33,7 @@ class ModelTResponder
   end
 
   def authenticate( authentication_token )
-    response = api_post( "authentication", { device_id: @device.id, authentication_token: authentication_token } )
+    response = api_post( "account/authenticate", { device_id: @device.id, authentication_token: authentication_token } )
 
     raise AuthenticationTokenNotFound if response.code != 200
 

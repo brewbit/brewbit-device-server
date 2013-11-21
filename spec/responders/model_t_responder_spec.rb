@@ -109,7 +109,7 @@ describe ModelTResponder do
 
       it 'successfully authenticates the device' do
         HTTParty.should_receive( :post )
-          .with( "#{@api_url}/authentication",
+          .with( "#{@api_url}/account/authenticate",
                  query: { device_id: @device.id, authentication_token: @device.authentication_token } )
           .and_return( @httparty_response )
 
