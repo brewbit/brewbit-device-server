@@ -1,3 +1,6 @@
+require 'simplecov'
+SimpleCov.start
+
 require 'ruby-debug'
 
 $: << File.join( File.dirname(__FILE__), '..' )

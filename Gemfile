@@ -19,4 +19,5 @@ gem 'rspec'
 gem 'em-spec'
 gem 'factory_girl'
 gem 'debugger'
+gem 'simplecov', '~> 0.7.1', :require => false
 
