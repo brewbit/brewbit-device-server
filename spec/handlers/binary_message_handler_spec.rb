@@ -10,7 +10,7 @@ describe BinaryMessageHandler do
     @device.id = 0x12345678
     @device.api_version = 1
     @device.authentication_token = 'kNf5UBtJpfRRUrq4zBLT'
-    @activation_token = '123456'
+    @activation_token = '12345678'
     @httparty_response = double('httparty response')
 
     @handler = BinaryMessageHandler.new @device

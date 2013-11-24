@@ -34,8 +34,8 @@ FactoryGirl.define do
 
     factory :authentication_token_request_message, class: Message do
       message_type Message::MESSAGE_TYPES[:authentication_token_request]
-      data_length "123456".length
-      data        "123456"
+      data_length "12345678".length
+      data        "12345678"
     end
 
     factory :authentication_request_message, class: Message do
