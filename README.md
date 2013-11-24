@@ -166,7 +166,7 @@ The server responds to a successful request with the user's API key
 #### Packet Contents
 ```
 | AUTHENTICATION TOKEN |
-|        U160          |
+|        U20           |
 ```
 
 #### Expected Response(s)
@@ -182,7 +182,7 @@ A device authenticates with the server, with the API key it already has
 #### Packet Contents
 ```
 | AUTHENTICATION TOKEN |
-|        U160          |
+|        U20           |
 ```
 
 #### Expected Response(s)
