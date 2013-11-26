@@ -22,7 +22,7 @@ class ModelTResponder
   end
 
   def get_authentication_token( activation_token )
-    response = api_post( "activation", { device_id: @device.id, activation_token: activation_token } )
+    response = api_post( "activation", { device_id: @device.id, activation_token: activation_token.to_binary_s[0...6] } )
     token = JSON.parse( response.body )['auth_token']
 
     raise ActivationTokenNotFound if response.code == 404
@@ -31,7 +31,7 @@ class ModelTResponder
   end
 
   def authenticate( authentication_token )
-    response = api_post( "account/authenticate", { device_id: @device.id, authentication_token: authentication_token } )
+    response = api_post( "account/authenticate", { device_id: @device.id, authentication_token: authentication_token.to_binary_s } )
 
     raise AuthenticationTokenNotFound if response.code != 200
 
@@ -53,10 +53,12 @@ class ModelTResponder
   private
 
   def api_get( path, query_opts = {} )
+    # TODO resque errors
     HTTParty.get( "#{BREWBIT_API_URL}/v#{@device.api_version}/#{path}", query: query_opts )
   end
 
   def api_post( path, query_opts = {} )
+    # TODO resque errors
     HTTParty.post( "#{BREWBIT_API_URL}/v#{@device.api_version}/#{path}", query: query_opts )
   end
 end
