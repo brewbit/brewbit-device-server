@@ -8,7 +8,7 @@ class ModelTServer < EM::Connection
 
   def post_init
     @@connected_devices.push self
-    @handler = BinaryMessageHandler.new self
+    #@handler = BinaryMessageHandler.new self
   end
 
   def unbind
@@ -16,7 +16,7 @@ class ModelTServer < EM::Connection
   end
 
   def receive_data( data )
-    send_message @handler.process data
+    #send_message @handler.process data
   end
 
   def self.devices
@@ -26,7 +26,7 @@ class ModelTServer < EM::Connection
   private
 
   def send_message( message )
-    send_data message.to_binary_s
+    send_data message
   end
 end
 
