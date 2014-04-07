@@ -50,8 +50,8 @@ module MessageHandler
     # raise MissingDeviceId if message.authRequest.device_id.blank?
     raise MissingAuthToken if message.authRequest.auth_token.blank?
 
-    Rails.logger.info 'Processing Auth Request'
-    Rails.logger.info "    Message: #{message.inspect}"
+    p 'Processing Auth Request'
+    p "    Message: #{message.inspect}"
 
     device_id = message.authRequest.device_id
     auth_token = message.authRequest.auth_token
@@ -69,8 +69,8 @@ module MessageHandler
 
     return if !connection.authenticated
 
-    Rails.logger.info 'Process Device Report'
-    Rails.logger.info "    Message: #{message.inspect}"
+    p 'Process Device Report'
+    p "    Message: #{message.inspect}"
 
     device = connection.device
 
@@ -85,8 +85,8 @@ module MessageHandler
   end
 
   def self.firmware_download_request( message, connection )
-    Rails.logger.info 'Process Firmware Download Request'
-    Rails.logger.info "    Message: #{message.inspect}"
+    p 'Process Firmware Download Request'
+    p "    Message: #{message.inspect}"
 
     return if !connection.authenticated
 
@@ -108,8 +108,8 @@ module MessageHandler
   end
 
   def self.firmware_update_check_request( message, connection )
-    Rails.logger.info 'Process Firmware Update Check Request'
-    Rails.logger.info "    Message: #{message.inspect}"
+    p 'Process Firmware Update Check Request'
+    p "    Message: #{message.inspect}"
 
     return if !connection.authenticated
 
@@ -135,8 +135,8 @@ module MessageHandler
   end
 
   def self.device_settings_notification( message, connection )
-    Rails.logger.info 'Process Device Settings Notification'
-    Rails.logger.info "    Message: #{message.inspect}"
+    p 'Process Device Settings Notification'
+    p "    Message: #{message.inspect}"
 
     return if !connection.authenticated
 
