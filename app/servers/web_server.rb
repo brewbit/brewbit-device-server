@@ -15,7 +15,7 @@ class WebServer < Sinatra::Base
     halt 400 if data.nil?
 
     EM.defer do
-      msg = MessageBuilder.build Message::MESSAGE_TYPES[:temp_profile], data
+      #msg = MessageBuilder.build Message::MESSAGE_TYPES[:temp_profile], data
 
       dev = ModelTServer.devices.first
       dev.send_message msg

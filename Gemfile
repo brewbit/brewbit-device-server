@@ -11,6 +11,8 @@ gem 'sinatra'
 gem 'thin'
 gem 'httparty'
 gem 'beefcake'
+gem 'log4r'
+gem 'debugger'
 
 gem 'guard', '~> 2.2.2'
 gem 'guard-rspec'

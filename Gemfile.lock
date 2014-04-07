@@ -9,7 +9,7 @@ GEM
       tzinfo (~> 0.3.37)
     atomic (1.1.12)
     bacon (1.2.0)
-    bindata (1.5.0)
+    beefcake (0.5.0)
     celluloid (0.15.2)
       timers (~> 1.1.0)
     coderay (1.0.9)
@@ -22,7 +22,6 @@ GEM
     debugger-linecache (1.2.0)
     debugger-ruby_core_source (1.2.3)
     diff-lcs (1.2.4)
-    digest-crc (0.4.0)
     em-spec (0.2.6)
       bacon
       eventmachine
@@ -49,6 +48,7 @@ GEM
       celluloid (>= 0.15.2)
       rb-fsevent (>= 0.9.3)
       rb-inotify (>= 0.9)
+    log4r (1.1.10)
     lumberjack (1.0.4)
     method_source (0.8.2)
     mime-types (1.23)
@@ -101,15 +101,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bindata
+  beefcake
   debugger
-  digest-crc
   em-spec
   eventmachine
   factory_girl
   guard (~> 2.2.2)
   guard-rspec
   httparty
+  log4r
   multi_json
   rake
   rest-client

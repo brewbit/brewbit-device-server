@@ -1,29 +1,22 @@
-require 'binary_message_handler'
+require 'device_manager'
 
 class ModelTServer < EM::Connection
 
-  @@connected_devices = Array.new
-
-  attr_accessor :api_version, :id, :authentication_token
-
   def post_init
-    @@connected_devices.push self
-    #@handler = BinaryMessageHandler.new self
+    p 'Connected'
+    DeviceManager.new( self )
   end
 
   def unbind
-    @@connected_devices.delete self
+    p 'Closed'
+    connection = DeviceManager.find_by_connection self
+    connection.delete if connection
   end
 
   def receive_data( data )
-    #send_message @handler.process data
+    p "Data: #{data}"
+    DeviceManager.handle( self, data )
   end
-
-  def self.devices
-    @@connected_devices
-  end
-
-  private
 
   def send_message( message )
     send_data message
