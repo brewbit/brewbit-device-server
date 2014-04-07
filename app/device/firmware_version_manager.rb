@@ -20,7 +20,7 @@ class FirmwareVersionManager
   private
 
   def self.build_firmware_info( firmware )
-    return nil if firmware.blank?
+    return nil if firmware.nil? || firmware.empty?
 
     { version: firmware.version, size: firmware.size }
   end

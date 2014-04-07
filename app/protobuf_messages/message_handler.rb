@@ -47,8 +47,7 @@ module MessageHandler
   end
 
   def self.auth_request( message, connection )
-    # raise MissingDeviceId if message.authRequest.device_id.blank?
-    raise MissingAuthToken if message.authRequest.auth_token.blank?
+    raise MissingAuthToken if message.authRequest.auth_token.nil? || message.authRequest.auth_token.empty?
 
     p 'Processing Auth Request'
     p "    Message: #{message.inspect}"
@@ -56,7 +55,8 @@ module MessageHandler
     device_id = message.authRequest.device_id
     auth_token = message.authRequest.auth_token
 
-    authenticated = connection.authenticate auth_token
+    # TODO: Send REST message to API
+    authenticated = true
 
     type = ProtobufMessages::ApiMessage::Type::AUTH_RESPONSE
     response_message = ProtobufMessages::Builder.build( type, authenticated )
@@ -65,7 +65,7 @@ module MessageHandler
   end
 
   def self.device_report( message, connection )
-    raise MissingSensorData if message.deviceReport.sensor_report.blank?
+    raise MissingSensorData if message.deviceReport.sensor_report.nil? || message.deviceReport.sensor_report.empty?
 
     return if !connection.authenticated
 
@@ -74,7 +74,7 @@ module MessageHandler
 
     device = connection.device
 
-    raise UnknownDevice if device.blank?
+    raise UnknownDevice if device.nil? || device.empty?
 
     message.deviceReport.sensor_report.each do |sensor|
       reading = sensor.value
@@ -119,7 +119,7 @@ module MessageHandler
     data = {}
     if FirmwareVersionManager.update_available?( current_version )
       update_info = FirmwareVersionManager.get_latest_version_info
-      unless update_info.blank?
+      unless update_info.nil? || update_info.empty?
         data[:update_available] = true
         data[:version] = update_info[:version]
         data[:binary_size] = update_info[:size]

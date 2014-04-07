@@ -48,16 +48,6 @@ class DeviceManager
     @connection = nil
   end
 
-  def authenticate( auth_token )
-    user = ApiKey.find_by_access_token( auth_token ).try( :user )
-
-    if device and user and device.user == user
-      @authenticated = true
-    else
-      false
-    end
-  end
-
   def process_data(data)
     while data.length > 0
       length = (data.length > @bytes_remaining ? @bytes_remaining : data.length)
