@@ -13,8 +13,8 @@ module WebApi
     token
   end
 
-  def self.authenticate( device_id, authentication_token )
-    response = api_get( device_id, "auth/new.json", { authentication_token: authentication_token } )
+  def self.authenticate( device_id, auth_token )
+    response = api_get( device_id, "auth/new.json", { auth_token: auth_token } )
 
     return false if response.code != 200
 
@@ -57,14 +57,18 @@ module WebApi
     true
   end
 
-  def self.api_get( device_id, path, query_opts = {} )
+  def self.api_get( device_id, path, options = {} )
     # TODO resque errors
-    HTTParty.get( "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}", query: query_opts )
+    HTTParty.get( "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}",
+                  body: options.to_json,
+                  headers: { 'Content-Type' => 'application/json' } )
   end
 
-  def self.api_post( device_id, path, query_opts = {} )
+  def self.api_post( device_id, path, options = {} )
     # TODO resque errors
-    HTTParty.post( "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}", query: query_opts )
+    HTTParty.post( "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}",
+                  body: options.to_json,
+                  headers: { 'Content-Type' => 'application/json' } )
   end
 end
 
