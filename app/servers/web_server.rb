@@ -23,21 +23,5 @@ class WebServer < Sinatra::Base
     200    
   end
 
-  post '/temperature_profile' do
-    data = request.body.read
-
-    puts "Recieved JSON Data: #{data}"
-
-    halt 400 if data.nil?
-
-    EM.defer do
-      #msg = MessageBuilder.build Message::MESSAGE_TYPES[:temp_profile], data
-
-      dev = ModelTServer.devices.first
-      dev.send_message msg
-    end
-
-    200
-  end
 end
 

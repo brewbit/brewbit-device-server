@@ -11,7 +11,7 @@ EventMachine::run {
   Signal.trap("INT")  { EventMachine.stop }
   Signal.trap("TERM") { EventMachine.stop }
 
-  EventMachine::start_server HOST, DEVICE_PORT, ModelTServer
+  EventMachine::start_server HOST, DEVICE_PORT, DeviceConnection
   puts "running device server on #{HOST}@#{DEVICE_PORT}"
 
   dispatch = Rack::Builder.app do

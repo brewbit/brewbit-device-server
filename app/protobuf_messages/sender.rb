@@ -24,7 +24,7 @@ module ProtobufMessages::Sender
     p "    Message: #{message.inspect}"
 
     # TODO use mutex to lock use of socket?
-    connection.send_message data
+    connection.send_data data
   end
 end
 
