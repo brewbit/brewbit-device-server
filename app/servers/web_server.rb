@@ -8,9 +8,9 @@ class WebServer < Sinatra::Base
   end
 
   post '/devices/:device_id/activation' do
-    data = request.body.read
+    data = JSON.parse(request.body.read)
 
-    puts "Recieved JSON Data: #{data}"
+    puts "Recieved JSON Data: #{data.inspect}"
 
     halt 400 if data.nil?
 
@@ -25,7 +25,7 @@ class WebServer < Sinatra::Base
     
     connection.auth_token = auth_token
     
-    message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::ACTIVATION_NOTIFICATION, data )
+    message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::ACTIVATION_NOTIFICATION, auth_token )
     ProtobufMessages::Sender.send message, connection
     
     200
