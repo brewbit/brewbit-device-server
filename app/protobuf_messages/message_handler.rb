@@ -1,6 +1,8 @@
 require 'messages'
 require 'builder'
 require 'sender'
+require 'model_t_responder'
+require 'firmware_serializer'
 
 module MessageHandler
 
@@ -37,10 +39,11 @@ module MessageHandler
     p 'Processing Activation Token Request'
     p "    Message: #{message.inspect}"
 
-    # TODO: Send REST message to API
+    device_id = message.activationTokenRequest.device_id
+    connection.device_id = device_id
 
+    data = ModelTResponder.get_activation_token( device_id )
     type = ProtobufMessages::ApiMessage::Type::ACTIVATION_TOKEN_RESPONSE
-    data = '3abcd'
     response_message = ProtobufMessages::Builder.build( type, data )
 
     send_response response_message, connection
@@ -55,11 +58,12 @@ module MessageHandler
     device_id = message.authRequest.device_id
     auth_token = message.authRequest.auth_token
 
-    # TODO: Send REST message to API
-    authenticated = true
+    connection.device_id = device_id
+    connection.auth_token = auth_token
 
+    connection.authenticated = ModelTResponder.authenticate( device_id, auth_token )
     type = ProtobufMessages::ApiMessage::Type::AUTH_RESPONSE
-    response_message = ProtobufMessages::Builder.build( type, authenticated )
+    response_message = ProtobufMessages::Builder.build( type, connection.authenticated )
 
     send_response response_message, connection
   end
@@ -72,16 +76,23 @@ module MessageHandler
     p 'Process Device Report'
     p "    Message: #{message.inspect}"
 
-    device = connection.device
+    auth_token = connection.auth_token
+    device_id = connection.device_id
 
-    raise UnknownDevice if device.nil? || device.empty?
+    options = {
+      "auth_token": auth token,
+      "readings": {
+        message.deviceReport.sensor_report.each do |sensor|
+          [
+            "sensor_index": sensor.id,
+            "reading": sensor.value,
+            "setpoint": sensor.setpoint
+          ],
+        end
+      }
+    }
 
-    message.deviceReport.sensor_report.each do |sensor|
-      reading = sensor.value
-      setpoint = sensor.setpoint
-      sensor_id = sensor.id
-      SensorReadingsService.record reading, setpoint, device, sensor_id
-    end
+    ModelTResponder.send_device_report( device_id, options )
   end
 
   def self.firmware_download_request( message, connection )
@@ -92,13 +103,13 @@ module MessageHandler
 
     version = message.firmwareDownloadRequest.requested_version
 
-    type = ProtobufMessages::ApiMessage::Type::FIRMWARE_DOWNLOAD_RESPONSE
+    firmware = ModelTResponder.get_firmware( version )
+    return if firmware.nil? || firmware.empty?
 
-    firmware = FirmwareVersionManager.get_firmware( version )
-
-    firmware_data = FirmwareSerializer.new( firmware.file )
+    firmware_data = FirmwareSerializer.new( firmware )
     total_packets = firmware.size
 
+    type = ProtobufMessages::ApiMessage::Type::FIRMWARE_DOWNLOAD_RESPONSE
     firmware_data.each_with_index do |chunk, i|
       offset = i * FirmwareSerializer::CHUNK_SIZE
       data = { offset: offset, chunk: chunk }
@@ -115,19 +126,16 @@ module MessageHandler
 
     current_version = message.firmwareUpdateCheckRequest.current_version
 
-    type = ProtobufMessages::ApiMessage::Type::FIRMWARE_UPDATE_CHECK_RESPONSE
+    response = ModelTResponder.firmware_update_available?( device_id, current_version )
     data = {}
-    if FirmwareVersionManager.update_available?( current_version )
-      update_info = FirmwareVersionManager.get_latest_version_info
-      unless update_info.nil? || update_info.empty?
-        data[:update_available] = true
-        data[:version] = update_info[:version]
-        data[:binary_size] = update_info[:size]
-      else
-        data[:update_available] = false
-      end
-    else
+
+    type = ProtobufMessages::ApiMessage::Type::FIRMWARE_UPDATE_CHECK_RESPONSE
+    if response.nil? || response.empty?
       data[:update_available] = false
+    else
+      data[:update_available] = true
+      data[:version] = response["version"]
+      data[:binary_size] = response["size"]
     end
 
     response_message = ProtobufMessages::Builder.build( type, data )
@@ -140,38 +148,34 @@ module MessageHandler
 
     return if !connection.authenticated
 
-    device = Device.find_by( hardware_identifier: connection.device_id )
+    device_id = connection.device_id
 
-    if device
-      device.name = message.deviceSettingsNotification.name
+    device = { outputs: [], sensors: []}
 
-      message.deviceSettingsNotification.output.each do |o|
-        if output = device.outputs.find_by( output_index: o.id )
-          output.function = Output::FUNCTIONS.values.index( o.function )
-          output.cycle_delay = o.cycle_delay
-          output.sensor = device.sensors.find_by( sensor_index: o.trigger_sensor_id )
+    device[:name] = message.deviceSettingsNotification.name
 
-          output.save
-        end
-      end
+    message.deviceSettingsNotification.output.each do |o|
+      output = {}
+      output[:id] =
+      output[:function] = o.function
+      output[:cycle_delay] = o.cycle_delay
+      output[:sensor] = o.trigger_sensor_id
+      output[:mode] = o.output_mode
 
-      message.deviceSettingsNotification.sensor.each do |s|
-        if sensor = device.sensors.find_by( sensor_index: s.id )
-          sensor.setpoint_type = s.setpoint_type
-
-          case s.setpoint_type
-          when ProtobufMessages::SensorSettings::SetpointType::STATIC
-            sensor.static_setpoint = s.static_setpoint
-          when ProtobufMessages::SensorSettings::SetpointType::TEMP_PROFILE
-            sensor.temp_profile_id = s.temp_profile_id
-          end
-
-          sensor.save
-        end
-      end
+      device[:outputs] << output
     end
 
-    device.save
+    message.deviceSettingsNotification.sensor.each do |s|
+      sensor = {}
+      sensor[:id] = s.id
+      sensor[:setpoitn_type] = s.setpoint_type
+      sensor[:static_setpoint] = s.static_setpoint
+      sensor[:temp_profile_id] = s.temp_profile_id
+
+      device[:sensors] << sensor
+    end
+
+    ModelTResponder.send_device_settings( device_id, device )
   end
 
   private

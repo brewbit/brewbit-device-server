@@ -7,18 +7,17 @@ class WebServer < Sinatra::Base
     set :threaded, false
   end
 
-  post '/temperature_profile' do
+  post '/devices/:id/activation' do
     data = request.body.read
 
     puts "Recieved JSON Data: #{data}"
 
+    device_id = data['device_id']
+    auth_token = data['auth_token']
+
     halt 400 if data.nil?
 
     EM.defer do
-      #msg = MessageBuilder.build Message::MESSAGE_TYPES[:temp_profile], data
-
-      dev = ModelTServer.devices.first
-      dev.send_message msg
     end
 
     200

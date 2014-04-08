@@ -2,8 +2,7 @@ require 'message_handler'
 
 class DeviceManager
   attr_reader :connection
-  attr_reader :device_id
-  attr_reader :authenticated
+  attr_accessor :device_id, :auth_token, :authenticated
 
   @@connections = []
 
@@ -22,14 +21,13 @@ class DeviceManager
   def initialize(connection)
     @connection = connection
     @authenticated = false
+    @auth_token = nil
 
     @buffer = ""
     @state = :length
     @bytes_remaining = 4
 
     @@connections << self
-
-    p @@connections
   end
 
   def self.handle( connection, data )
@@ -38,14 +36,15 @@ class DeviceManager
     connection.process_data data if connection
   end
 
-  def device
-    Device.find_by hardware_identifier: @device_id
-  end
-
   def delete
     @@connections.delete self
     @authenticated = false
     @connection = nil
+    @auth_token = nil
+  end
+
+  def send_message(data)
+    @connection.send_message(data)
   end
 
   def process_data(data)
@@ -63,7 +62,7 @@ class DeviceManager
           @state = :length
           @bytes_remaining = 4
 
-          MessageHandler.handle @connection, @buffer
+          MessageHandler.handle self, @buffer
         end
         @buffer = ""
       end

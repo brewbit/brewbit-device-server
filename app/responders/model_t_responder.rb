@@ -1,65 +1,70 @@
 require 'httparty'
 require 'json'
 
-class ModelTResponder
+module ModelTResponder
   include HTTParty
 
-  class FailedToGetActivationToken < Exception ; end
-  class ActivationTokenNotFound < Exception ; end
-  class AuthenticationTokenNotFound < Exception ; end
-
-  def initialize( device )
-    @device = device
-  end
-
-  def get_activation_token
-    response = api_get( "activation/new.json", {device_id: @device.id} )
+  def self.get_activation_token( device_id )
+    response = api_get( device_id, "activation/new.json" )
     token = JSON.parse( response.body )["activation_token"]
 
-    raise FailedToGetActivationToken if token.empty? || response.code != 200
+    return nil if token.empty? || response.code != 200
 
     token
   end
 
-  def get_authentication_token( activation_token )
-    response = api_post( "activation", { device_id: @device.id, activation_token: activation_token.to_binary_s[0...6] } )
-    token = JSON.parse( response.body )['auth_token']
+  def self.authenticate( device_id, authentication_token )
+    response = api_get( device_id, "auth/new.json", { authentication_token: authentication_token } )
 
-    raise ActivationTokenNotFound if response.code == 404
-
-    token
-  end
-
-  def authenticate( authentication_token )
-    response = api_post( "account/authenticate.json", { device_id: @device.id, authentication_token: authentication_token.to_binary_s } )
-
-    raise AuthenticationTokenNotFound if response.code != 200
+    return false if response.code != 200
 
     true
   end
 
-  def set_device_status( status, authentication_token )
-    response = api_post( "devices/#{@device.id}", { authentication_token: authentication_token, device: status } )
-    response.header.code == "201"
-    # TODO: handle non-201 responses
+  def self.send_device_report( device_id, options )
+    response = api_post( device_id, 'reports', options )
+
+    return false if response.code != 200
+
+    response
   end
 
-  def update_device_settings( settings, authentication_token )
-    response = api_post( "devices/#{@device.id}", { authentication_token: authentication_token, device: settings } )
-    response.header.code == "201"
-    # TODO: handle non-201 response
+  def self.firmware_update_available?( device_id, version )
+    options = { current_version: version }
+
+    response = api_get( device_id, 'firmware/check.json', options )
+
+    return false if response.code != 200
+
+    JSON.parse( response.body)["update"]
   end
 
-  private
+  def self.get_firmware( device_id, version )
+    options = { version: version }
 
-  def api_get( path, query_opts = {} )
+    response = api_get( device_id, 'firmware/show.json', options )
+
+    return nil if response.code != 200
+
+    JSON.parse( response.body )['firmware']
+  end
+
+  def self.send_device_settings( device_id, options )
+    response = api_post( device_id, 'settings.json', options )
+
+    return nil if response.code != 200
+
+    true
+  end
+
+  def self.api_get( device_id, path, query_opts = {} )
     # TODO resque errors
-    HTTParty.get( "#{BREWBIT_API_URL}/v#{@device.api_version}/#{path}", query: query_opts )
+    HTTParty.get( "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}", query: query_opts )
   end
 
-  def api_post( path, query_opts = {} )
+  def self.api_post( device_id, path, query_opts = {} )
     # TODO resque errors
-    HTTParty.post( "#{BREWBIT_API_URL}/v#{@device.api_version}/#{path}", query: query_opts )
+    HTTParty.post( "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}", query: query_opts )
   end
 end
 

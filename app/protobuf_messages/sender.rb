@@ -12,9 +12,11 @@ module ProtobufMessages::Sender
 
     msg = message.encode.to_s
 
-    length = "0x%04x" % msg.size.to_s
+    length = [msg.size].pack('N')
 
-    (length + msg).unpack('c*')
+    wrapped_message = length + msg
+
+    wrapped_message.unpack('c*')
   end
 
   def self.send_message( message, connection )
@@ -22,6 +24,7 @@ module ProtobufMessages::Sender
 
     p 'Sending Message'
     p "    Message: #{message.inspect}"
+    p "    Data: #{data}"
 
     # TODO use mutex to lock use of socket?
     connection.send_message data
