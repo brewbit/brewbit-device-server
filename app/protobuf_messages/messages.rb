@@ -23,7 +23,7 @@ module ProtobufMessages
     include Beefcake::Message
   end
 
-  class SensorReport
+  class ControllerReport
     include Beefcake::Message
   end
 
@@ -137,15 +137,15 @@ module ProtobufMessages
   end
 
 
-  class SensorReport
-    required :id, :uint32, 1
-    required :value, :float, 2
+  class ControllerReport
+    required :controller_index, :uint32, 1
+    required :sensor_reading, :float, 2
     required :setpoint, :float, 3
   end
 
 
   class DeviceReport
-    repeated :sensor_report, SensorReport, 1
+    repeated :controller_reports, ControllerReport, 1
   end
 
 

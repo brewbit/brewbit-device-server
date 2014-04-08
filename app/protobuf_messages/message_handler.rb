@@ -69,7 +69,7 @@ module MessageHandler
   end
 
   def self.device_report( message, connection )
-    raise MissingSensorData if message.deviceReport.sensor_report.nil? || message.deviceReport.sensor_report.empty?
+    raise MissingSensorData if message.deviceReport.controller_reports.nil? || message.deviceReport.controller_reports.empty?
 
     return if !connection.authenticated
 
@@ -81,15 +81,13 @@ module MessageHandler
 
     options = {
       auth_token: auth_token,
-      readings: [
-        message.deviceReport.sensor_report.each do |sensor|
-          {
-            sensor_index: sensor.id,
-            reading: sensor.value,
-            setpoint: sensor.setpoint
-          }
-        end
-      ]
+      controller_reports:
+        message.deviceReport.controller_reports.collect { |report| {
+          controller_index: report.controller_index,
+          sensor_reading:   report.sensor_reading,
+          setpoint:         report.setpoint
+        }
+      }
     }
 
     WebApi.send_device_report( device_id, options )
