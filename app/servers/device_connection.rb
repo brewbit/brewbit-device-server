@@ -32,4 +32,8 @@ class DeviceConnection < EM::Connection
   def dispatch_msg( payload )
     MessageHandler.handle self, payload
   end
+  
+  def device_id=(device_id)
+    @device_id = device_id
+  end
 end

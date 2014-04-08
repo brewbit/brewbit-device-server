@@ -8,15 +8,13 @@ module ProtobufMessages::Sender
   private
 
   def self.serialize_message( message )
-    # TODO: Add 4 bytes with message length to message
-
     msg = message.encode.to_s
 
     length = [msg.size].pack('N')
 
     wrapped_message = length + msg
 
-    wrapped_message.unpack('c*')
+    wrapped_message
   end
 
   def self.send_message( message, connection )
