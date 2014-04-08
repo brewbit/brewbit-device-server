@@ -1,21 +1,11 @@
-require 'message_handler'
-
 class DeviceManager
   attr_reader :connection
   attr_accessor :device_id, :auth_token, :authenticated
 
   @@connections = []
 
-  def self.all
-    @@connections
-  end
-
-  def self.find_by_connection(connection)
-    all.detect { |l| l.connection == connection }
-  end
-
   def self.find_by_device_id(device_id)
-    all.detect { |l| l.device_id == device_id }
+    @@connections.detect { |l| l.device_id == device_id }
   end
 
   def initialize(connection)
@@ -67,5 +57,12 @@ class DeviceManager
         @buffer = ""
       end
     end
+
+  def register(connection)
+    @@connections << connections
+  end
+
+  def unregister(connection)
+    @@connections.delete connection
   end
 end

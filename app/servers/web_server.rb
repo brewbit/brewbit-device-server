@@ -19,6 +19,12 @@ class WebServer < Sinatra::Base
 
     EM.defer do
     end
+  end
+
+  post '/devices/:device_id/commands' do
+    data = request.body.read
+
+    puts "Recieved device command. Data: #{data}"
 
     200
   end
