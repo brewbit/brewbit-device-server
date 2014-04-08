@@ -6,6 +6,22 @@ class WebServer < Sinatra::Base
   configure do
     set :threaded, false
   end
+  
+  post '/devices/:device_id/activate' do
+    data = request.body.read
+
+    puts "Recieved activate notification. Data: #{data}"
+
+    200    
+  end
+  
+  post '/devices/:device_id/commands' do
+    data = request.body.read
+
+    puts "Recieved device command. Data: #{data}"
+
+    200    
+  end
 
   post '/temperature_profile' do
     data = request.body.read

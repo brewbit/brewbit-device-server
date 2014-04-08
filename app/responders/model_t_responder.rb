@@ -21,15 +21,6 @@ class ModelTResponder
     token
   end
 
-  def get_authentication_token( activation_token )
-    response = api_post( "activation", { device_id: @device.id, activation_token: activation_token.to_binary_s[0...6] } )
-    token = JSON.parse( response.body )['auth_token']
-
-    raise ActivationTokenNotFound if response.code == 404
-
-    token
-  end
-
   def authenticate( authentication_token )
     response = api_post( "account/authenticate.json", { device_id: @device.id, authentication_token: authentication_token.to_binary_s } )
 
