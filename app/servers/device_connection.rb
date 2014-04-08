@@ -4,12 +4,14 @@ require 'message_handler'
 
 class DeviceConnection < EM::Connection
   attr_reader :device_id
+  attr_reader :auth_token
   attr_reader :authenticated
 
   def post_init
     p 'Connected'
 
     @device_id = nil
+    @auth_token = nil
     @authenticated = false
     @parser = MessageParser.new(self)
 
@@ -35,5 +37,13 @@ class DeviceConnection < EM::Connection
   
   def device_id=(device_id)
     @device_id = device_id
+  end
+  
+  def auth_token=(auth_token)
+    @auth_token = auth_token
+  end
+  
+  def authenticated=(authenticated)
+    @authenticated = authenticated
   end
 end

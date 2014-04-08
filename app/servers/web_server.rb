@@ -23,6 +23,8 @@ class WebServer < Sinatra::Base
     connection = DeviceManager.find_by_device_id device_id
     halt 404 unless connection
     
+    connection.auth_token = auth_token
+    
     message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::ACTIVATION_NOTIFICATION, data )
     ProtobufMessages::Sender.send message, connection
     
