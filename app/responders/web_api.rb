@@ -1,7 +1,7 @@
 require 'httparty'
 require 'json'
 
-module ModelTResponder
+module WebApi
   include HTTParty
 
   def self.get_activation_token( device_id )

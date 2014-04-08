@@ -1,7 +1,7 @@
 require 'messages'
 require 'builder'
 require 'sender'
-require 'model_t_responder'
+require 'web_api'
 require 'firmware_serializer'
 
 module MessageHandler
@@ -42,7 +42,7 @@ module MessageHandler
     device_id = message.activationTokenRequest.device_id
     connection.device_id = device_id
 
-    data = ModelTResponder.get_activation_token( device_id )
+    data = WebApi.get_activation_token( device_id )
     type = ProtobufMessages::ApiMessage::Type::ACTIVATION_TOKEN_RESPONSE
     response_message = ProtobufMessages::Builder.build( type, data )
 
@@ -61,7 +61,7 @@ module MessageHandler
     connection.device_id = device_id
     connection.auth_token = auth_token
 
-    connection.authenticated = ModelTResponder.authenticate( device_id, auth_token )
+    connection.authenticated = WebApi.authenticate( device_id, auth_token )
     type = ProtobufMessages::ApiMessage::Type::AUTH_RESPONSE
     response_message = ProtobufMessages::Builder.build( type, connection.authenticated )
 
@@ -92,7 +92,7 @@ module MessageHandler
       ]
     }
 
-    ModelTResponder.send_device_report( device_id, options )
+    WebApi.send_device_report( device_id, options )
   end
 
   def self.firmware_download_request( message, connection )
@@ -103,7 +103,7 @@ module MessageHandler
 
     version = message.firmwareDownloadRequest.requested_version
 
-    firmware = ModelTResponder.get_firmware( version )
+    firmware = WebApi.get_firmware( version )
     return if firmware.nil? || firmware.empty?
 
     firmware_data = FirmwareSerializer.new( firmware )
@@ -126,7 +126,7 @@ module MessageHandler
 
     current_version = message.firmwareUpdateCheckRequest.current_version
 
-    response = ModelTResponder.firmware_update_available?( device_id, current_version )
+    response = WebApi.firmware_update_available?( device_id, current_version )
     data = {}
 
     type = ProtobufMessages::ApiMessage::Type::FIRMWARE_UPDATE_CHECK_RESPONSE
@@ -175,7 +175,7 @@ module MessageHandler
       device[:sensors] << sensor
     end
 
-    ModelTResponder.send_device_settings( device_id, device )
+    WebApi.send_device_settings( device_id, device )
   end
 
   private
