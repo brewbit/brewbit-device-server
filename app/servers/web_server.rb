@@ -7,18 +7,26 @@ class WebServer < Sinatra::Base
     set :threaded, false
   end
 
-  post '/devices/:id/activation' do
+  post '/devices/:device_id/activation' do
     data = request.body.read
 
     puts "Recieved JSON Data: #{data}"
 
-    device_id = data['device_id']
-    auth_token = data['auth_token']
-
     halt 400 if data.nil?
 
-    EM.defer do
-    end
+    device_id = params['device_id']
+    halt 400 unless device_id
+    
+    auth_token = data['auth_token']
+    halt 400 unless auth_token
+
+    connection = DeviceManager.find_by_device_id device_id
+    halt 404 unless connection
+    
+    message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::ACTIVATION_NOTIFICATION, data )
+    ProtobufMessages::Sender.send message, connection
+    
+    200
   end
 
   post '/devices/:device_id/commands' do
