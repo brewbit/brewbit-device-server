@@ -33,4 +33,3 @@ class DeviceConnection < EM::Connection
     MessageHandler.handle self, payload
   end
 end
-

@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'model_t_responder'
 require 'eventmachine'
-require 'model_t_server'
+require 'device_connection'
 
 describe ModelTResponder do
 

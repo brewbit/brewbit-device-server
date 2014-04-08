@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-#ruby=1.9.3-p484
+#ruby=2.1.0
 #ruby-gemset=model-t-server
 
 gem 'rake'

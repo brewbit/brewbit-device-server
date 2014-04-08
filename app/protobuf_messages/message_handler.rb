@@ -80,16 +80,16 @@ module MessageHandler
     device_id = connection.device_id
 
     options = {
-      "auth_token": auth token,
-      "readings": {
+      auth_token: auth_token,
+      readings: [
         message.deviceReport.sensor_report.each do |sensor|
-          [
-            "sensor_index": sensor.id,
-            "reading": sensor.value,
-            "setpoint": sensor.setpoint
-          ],
+          {
+            sensor_index: sensor.id,
+            reading: sensor.value,
+            setpoint: sensor.setpoint
+          }
         end
-      }
+      ]
     }
 
     ModelTResponder.send_device_report( device_id, options )

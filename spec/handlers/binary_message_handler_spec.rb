@@ -1,7 +1,7 @@
 require 'spec_helper'
 require 'binary_message_handler'
 require 'eventmachine'
-require 'model_t_server'
+require 'device_connection'
 
 describe BinaryMessageHandler do
 

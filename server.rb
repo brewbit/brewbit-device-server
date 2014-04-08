@@ -4,7 +4,7 @@ require './config'
 
 require 'eventmachine'
 require 'thin'
-require 'model_t_server'
+require 'device_connection'
 require 'web_server'
 
 EventMachine::run {
