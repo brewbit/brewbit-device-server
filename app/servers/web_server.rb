@@ -10,9 +10,9 @@ class WebServer < Sinatra::Base
   post '/devices/:device_id/activation' do
     data = JSON.parse(request.body.read)
 
-    puts "Recieved JSON Data: #{data.inspect}"
-
     halt 400 if data.nil?
+
+    puts "Recieved JSON Data: #{data.inspect}"
 
     device_id = params['device_id']
     halt 400 unless device_id
@@ -32,9 +32,20 @@ class WebServer < Sinatra::Base
   end
 
   post '/devices/:device_id/commands' do
-    data = request.body.read
+    data = JSON.parse(request.body.read)
 
-    puts "Recieved device command. Data: #{data}"
+    halt 400 if data.nil?
+
+    puts "Recieved device command. Data: #{data.inspect}"
+    
+    device_id = params['device_id']
+    halt 400 unless device_id
+    
+    connection = DeviceManager.find_by_device_id device_id
+    halt 404 unless connection
+    
+    message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS_NOTIFICATION, data )
+    ProtobufMessages::Sender.send message, connection
 
     200
   end

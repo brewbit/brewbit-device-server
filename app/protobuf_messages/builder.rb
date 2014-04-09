@@ -73,46 +73,46 @@ module ProtobufMessages::Builder
     message = ProtobufMessages::ApiMessage.new
     message.type = ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS_NOTIFICATION
     message.deviceSettingsNotification = ProtobufMessages::DeviceSettingsNotification.new
-    message.deviceSettingsNotification.name = data[:name]
+    message.deviceSettingsNotification.name = data['name']
 
     message.deviceSettingsNotification.output = []
-    data[:outputs].each do |o|
+    data['outputs'].each do |o|
       output = ProtobufMessages::OutputSettings.new
-      output.id = o[:index]
-      output.function = o[:function]
-      output.cycle_delay = o[:cycle_delay]
-      output.trigger_sensor_id = o[:sensor_index]
-      output.output_mode = o[:output_mode]
+      output.id = o['index']
+      output.function = o['function']
+      output.cycle_delay = o['cycle_delay']
+      output.trigger_sensor_id = o['sensor_index']
+      output.output_mode = o['output_mode']
       message.deviceSettingsNotification.output << output
     end
 
     message.deviceSettingsNotification.sensor = []
-    data[:sensors].each do |s|
+    data['sensors'].each do |s|
       sensor = ProtobufMessages::SensorSettings.new
-      sensor.id = s[:index]
-      sensor.setpoint_type = s[:setpoint_type]
+      sensor.id = s['index']
+      sensor.setpoint_type = s['setpoint_type']
 
       case sensor.setpoint_type
       when ProtobufMessages::SensorSettings::SetpointType::STATIC
-        sensor.static_setpoint = s[:static_setpoint]
+        sensor.static_setpoint = s['static_setpoint']
       when ProtobufMessages::SensorSettings::SetpointType::TEMP_PROFILE
-        sensor.temp_profile_id = s[:temp_profile_id]
+        sensor.temp_profile_id = s['temp_profile_id']
       end
       message.deviceSettingsNotification.sensor << sensor
     end
 
     message.deviceSettingsNotification.temp_profiles = []
-    data[:temp_profiles].each do |s|
+    data['temp_profiles'].each do |s|
       temp_profile = ProtobufMessages::TempProfile.new
-      temp_profile.id          = s[:id]
-      temp_profile.name        = s[:name]
-      temp_profile.start_value = s[:start_value]
+      temp_profile.id          = s['id']
+      temp_profile.name        = s['name']
+      temp_profile.start_value = s['start_value']
       temp_profile.steps       = []
-      s[:steps].each do |st|
+      s['steps'].each do |st|
         temp_profile_step = ProtobufMessages::TempProfileStep.new
-        temp_profile_step.duration = st[:duration]
-        temp_profile_step.value    = st[:value]
-        temp_profile_step.type     = st[:type]
+        temp_profile_step.duration = st['duration']
+        temp_profile_step.value    = st['value']
+        temp_profile_step.type     = st['type']
         
         temp_profile.steps << temp_profile_step
       end
