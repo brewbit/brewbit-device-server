@@ -12,6 +12,7 @@ gem 'thin'
 gem 'httparty'
 gem 'beefcake'
 gem 'log4r'
+gem 'foreman'
 
 gem 'guard', '~> 2.2.2'
 gem 'guard-rspec'
