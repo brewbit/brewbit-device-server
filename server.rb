@@ -7,12 +7,15 @@ require 'thin'
 require 'device_connection'
 require 'web_server'
 
+puts "Starting device server on #{HOST}:#{DEVICE_PORT}"
+puts "Starting web server on #{HOST}:#{WEB_PORT}"
+puts "Using brewbit API at #{BREWBIT_API_HOST}"
+
 EventMachine::run {
   Signal.trap("INT")  { EventMachine.stop }
   Signal.trap("TERM") { EventMachine.stop }
 
   EventMachine::start_server HOST, DEVICE_PORT, DeviceConnection
-  puts "running device server on #{HOST}@#{DEVICE_PORT}"
 
   dispatch = Rack::Builder.app do
     map '/' do
