@@ -80,7 +80,10 @@ module WebApi
     response = HTTParty.get( "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}",
                   body: options.to_json,
                   headers: { 'Content-Type' => 'application/json' } )
-    raise JSON.parse(response.body)['message'] if response.code != 200
+    response_body = JSON.parse( response.body )
+    raise response_body['message'] if response.code != 200
+    
+    response_body
   end
 
   def self.api_post( device_id, path, options = {} )
