@@ -74,37 +74,26 @@ module WebApi
   end
   
   private
-
+  
   def self.api_get( device_id, path, options = {} )
-    url = "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}"
-    p "Sending request to #{url}"
-    p "    #{options.inspect}"
-    
-    response = HTTParty.get( url,
-                  body: options.to_json,
-                  headers: { 'Content-Type' => 'application/json' } )
-    p "    Server returned: #{response.body}"
-    
-    response_json = JSON.parse( response.body )
-    
-    if response.code != 200
-      message = response_json['message']
-      p "Request failed: #{message}"
-      raise message
-    end
-    
-    response_json
+    api_send( :get, device_id, path, options )
+  end
+  
+  def self.api_post( device_id, path, options = {} )
+    api_send( :post, device_id, path, options )
   end
 
-  def self.api_post( device_id, path, options = {} )
+  def self.api_send( method, device_id, path, options )
     url = "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}"
     p "Sending request to #{url}"
     p "    #{options.inspect}"
     
-    response = HTTParty.post( url,
+    response = HTTParty.send(
+                  method,
+                  url,
                   body: options.to_json,
                   headers: { 'Content-Type' => 'application/json' } )
-    p "    Server returned: #{response.body}"
+    p "    Server returned: #{response.code} #{response.body}"
     
     response_json = JSON.parse( response.body )
     
