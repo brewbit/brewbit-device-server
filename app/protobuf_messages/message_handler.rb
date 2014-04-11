@@ -13,9 +13,10 @@ module MessageHandler
 
   def self.handle( connection, msg )
     p 'Processing Message'
-    p "    Message: #{msg.inspect}"
+    p "    raw message: #{msg.inspect}"
 
     message = ProtobufMessages::ApiMessage.decode( msg )
+    p "    decoded message: #{message.inspect}"
 
     case message.type
     when ProtobufMessages::ApiMessage::Type::ACTIVATION_TOKEN_REQUEST
