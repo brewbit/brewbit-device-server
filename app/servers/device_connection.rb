@@ -24,10 +24,11 @@ class DeviceConnection < EM::Connection
     time_since_last_recv = Time.now.to_i - @last_recv.to_i
     puts "Tick #{time_since_last_recv} ..."
     if (time_since_last_recv) > 15
-      close_connection_after_writing
+      close_connection
+    else
+      # send keepalive
+      send_data [0].pack('N')
     end
-    
-    send_data [0].pack('N')
   end
 
   def unbind
