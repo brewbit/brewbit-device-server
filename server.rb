@@ -1,6 +1,6 @@
 #!/usr/bin/env ruby
 
-require_relative '../config'
+require './config'
 
 require 'eventmachine'
 require 'thin'
