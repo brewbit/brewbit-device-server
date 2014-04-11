@@ -3,9 +3,9 @@ require 'message_parser'
 require 'message_handler'
 
 class DeviceConnection < EM::Connection
-  attr_reader :device_id
-  attr_reader :auth_token
-  attr_reader :authenticated
+  attr_accessor :device_id
+  attr_accessor :auth_token
+  attr_accessor :authenticated
 
   def post_init
     p "Connected #{Time.now}"
@@ -22,7 +22,7 @@ class DeviceConnection < EM::Connection
   
   def tick
     time_since_last_recv = Time.now.to_i - @last_recv.to_i
-    puts "Tick #{time_since_last_recv} ..."
+    p "Tick #{time_since_last_recv} ..."
     if (time_since_last_recv) > 15
       close_connection
     else
@@ -47,17 +47,5 @@ class DeviceConnection < EM::Connection
 
   def dispatch_msg( payload )
     MessageHandler.handle self, payload
-  end
-
-  def device_id=(device_id)
-    @device_id = device_id
-  end
-
-  def auth_token=(auth_token)
-    @auth_token = auth_token
-  end
-
-  def authenticated=(authenticated)
-    @authenticated = authenticated
   end
 end

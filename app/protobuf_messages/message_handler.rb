@@ -12,7 +12,7 @@ module MessageHandler
   class UnknownDevice < Exception ; end
 
   def self.handle( connection, msg )
-    p 'Processing Message'
+    p "Processing Message from #{connection.device_id}"
     p "    raw message: #{msg.inspect}"
 
     message = ProtobufMessages::ApiMessage.decode( msg )

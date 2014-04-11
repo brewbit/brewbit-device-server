@@ -76,25 +76,45 @@ module WebApi
   private
 
   def self.api_get( device_id, path, options = {} )
-    # TODO resque errors
-    response = HTTParty.get( "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}",
+    url = "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}"
+    p "Sending request to #{url}"
+    p "    #{options.inspect}"
+    
+    response = HTTParty.get( url,
                   body: options.to_json,
                   headers: { 'Content-Type' => 'application/json' } )
-    response_body = JSON.parse( response.body )
-    raise response_body['message'] if response.code != 200
+    p "    Server returned: #{response.body}"
     
-    response_body
+    response_json = JSON.parse( response.body )
+    
+    if response.code != 200
+      message = response_json['message']
+      p "Request failed: #{message}"
+      raise message
+    end
+    
+    response_json
   end
 
   def self.api_post( device_id, path, options = {} )
-    # TODO resque errors
-    response = HTTParty.post( "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}",
+    url = "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}"
+    p "Sending request to #{url}"
+    p "    #{options.inspect}"
+    
+    response = HTTParty.post( url,
                   body: options.to_json,
                   headers: { 'Content-Type' => 'application/json' } )
-    response_body = JSON.parse( response.body )
-    raise response_body['message'] if response.code != 200
+    p "    Server returned: #{response.body}"
     
-    response_body
+    response_json = JSON.parse( response.body )
+    
+    if response.code != 200
+      message = response_json['message']
+      p "Request failed: #{message}"
+      raise message
+    end
+    
+    response_json
   end
 end
 
