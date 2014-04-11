@@ -1,1 +1,1 @@
-app:   cd /var/www/dg.staging.brewbit.com/current && ./server.rb
+app:   cd /var/www/dg.staging.brewbit.com/current && ( bundle exec server )
