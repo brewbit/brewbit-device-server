@@ -15,7 +15,9 @@ EventMachine::run {
   Signal.trap("INT")  { EventMachine.stop }
   Signal.trap("TERM") { EventMachine.stop }
 
-  EventMachine::start_server HOST, DEVICE_PORT, DeviceConnection
+  EventMachine::start_server HOST, DEVICE_PORT, DeviceConnection do |connection|
+    connection.comm_inactivity_timeout = DEVICE_CONNECTION_TIMEOUT
+  end
 
   dispatch = Rack::Builder.app do
     map '/' do

@@ -8,7 +8,7 @@ class DeviceConnection < EM::Connection
   attr_reader :authenticated
 
   def post_init
-    p 'Connected'
+    p "Connected #{Time.now}"
 
     @device_id = nil
     @auth_token = nil
@@ -19,30 +19,30 @@ class DeviceConnection < EM::Connection
   end
 
   def unbind
-    p 'Closed'
-    
+    p "Closed #{Time.now}"
+
     @authenticated = false
     DeviceManager.unregister self
   end
-  
+
   def receive_data( data )
     p "Data: #{data}"
-    
+
     @parser.consume data
   end
 
   def dispatch_msg( payload )
     MessageHandler.handle self, payload
   end
-  
+
   def device_id=(device_id)
     @device_id = device_id
   end
-  
+
   def auth_token=(auth_token)
     @auth_token = auth_token
   end
-  
+
   def authenticated=(authenticated)
     @authenticated = authenticated
   end
