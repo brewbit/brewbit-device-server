@@ -1,1 +1,1 @@
-app:   cd /var/www/dg.staging.brewbit.com/current && ( /usr/local/rvm/bin/rvm default do ./server.rb
+app:   cd /var/www/dg.staging.brewbit.com/current && ./server.rb
