@@ -13,6 +13,7 @@ module WebApi
       
       token
     rescue
+      puts $!.inspect, $@
       nil
     end
   end
@@ -22,6 +23,7 @@ module WebApi
       api_get( device_id, "auth/new.json", { auth_token: auth_token } )
       true
     rescue
+      puts $!.inspect, $@
       false
     end
   end
@@ -31,6 +33,7 @@ module WebApi
       api_post( device_id, 'reports', options )
       true
     rescue
+      puts $!.inspect, $@
       false
     end
   end
@@ -42,6 +45,7 @@ module WebApi
       
       response['update']
     rescue
+      puts $!.inspect, $@
       false
     end
   end
@@ -54,6 +58,7 @@ module WebApi
 
       response['firmware']
     rescue
+      puts $!.inspect, $@
       nil
     end
   end
@@ -63,6 +68,7 @@ module WebApi
       response = api_post( device_id, 'settings.json', options )
       true
     rescue
+      puts $!.inspect, $@
       nil
     end
   end
