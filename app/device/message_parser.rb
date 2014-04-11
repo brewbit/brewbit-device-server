@@ -18,6 +18,10 @@ class MessageParser
         if :length == @state
           @state = :data
           @bytes_remaining = @buffer.unpack('N').first
+          if @bytes_remaining == 0
+            @state = :length
+            @bytes_remaining = 4
+          end
         elsif :data == @state
           @state = :length
           @bytes_remaining = 4
