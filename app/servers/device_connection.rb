@@ -14,8 +14,19 @@ class DeviceConnection < EM::Connection
     @auth_token = nil
     @authenticated = false
     @parser = MessageParser.new(self)
+    @last_recv = Time.now
 
     DeviceManager.register self
+    EM.add_periodic_timer(10) { tick }
+  end
+  
+  def tick
+    puts "Tick #{Time.now.sec - @last_recv.sec} ..."
+    if (Time.now.sec - @last_recv.sec) > 15
+      close_connection_after_writing
+    end
+    
+    send_data [0].pack('N')
   end
 
   def unbind
@@ -27,7 +38,7 @@ class DeviceConnection < EM::Connection
 
   def receive_data( data )
     p "Data: #{data}"
-
+    @last_recv = Time.now
     @parser.consume data
   end
 
