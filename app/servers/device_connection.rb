@@ -17,11 +17,11 @@ class DeviceConnection < EM::Connection
     @last_recv = Time.now
 
     DeviceManager.register self
-    EM.add_periodic_timer(10) { tick }
+    @timer = EM.add_periodic_timer(10) { tick }
   end
   
   def tick
-    puts "Tick #{Time.now.sec - @last_recv.sec} ..."
+    puts "Tick #{Time.now.to_i - @last_recv.to_i} ..."
     if (Time.now.sec - @last_recv.sec) > 15
       close_connection_after_writing
     end
@@ -32,6 +32,7 @@ class DeviceConnection < EM::Connection
   def unbind
     p "Closed #{Time.now}"
 
+    @timer.cancel
     @authenticated = false
     DeviceManager.unregister self
   end
