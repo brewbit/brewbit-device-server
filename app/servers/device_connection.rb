@@ -21,8 +21,9 @@ class DeviceConnection < EM::Connection
   end
   
   def tick
-    puts "Tick #{Time.now.to_i - @last_recv.to_i} ..."
-    if (Time.now.sec - @last_recv.sec) > 15
+    time_since_last_recv = Time.now.to_i - @last_recv.to_i
+    puts "Tick #{time_since_last_recv} ..."
+    if (time_since_last_recv) > 15
       close_connection_after_writing
     end
     
