@@ -25,6 +25,7 @@ class WebServer < Sinatra::Base
 
     connections.each do |connection|
       connection.auth_token = auth_token
+      connection.authenticated = true
 
       message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::ACTIVATION_NOTIFICATION, auth_token )
       ProtobufMessages::Sender.send message, connection
