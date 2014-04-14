@@ -53,13 +53,16 @@ module WebApi
     end
   end
 
-  def self.get_firmware( device_id, version )
+  def self.get_firmware( device_id, version, auth_token )
     begin
-      options = { version: version }
+      options = {
+        auth_token: auth_token,
+        version: version
+      }
 
       response = api_get( device_id, 'firmware/show.json', options )
 
-      response['firmware']
+      Base64.decode64(response['file_b64'])
     rescue
       puts $!.inspect, $@
       nil

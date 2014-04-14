@@ -100,9 +100,11 @@ module MessageHandler
 
     return if !connection.authenticated
 
+    auth_token = connection.auth_token
+    device_id = connection.device_id
     version = message.firmwareDownloadRequest.requested_version
 
-    firmware = WebApi.get_firmware( version )
+    firmware = WebApi.get_firmware( device_id, version, auth_token )
     return if firmware.nil? || firmware.empty?
 
     firmware_data = FirmwareSerializer.new( firmware )
