@@ -123,13 +123,14 @@ module MessageHandler
 
     return if !connection.authenticated
 
+    auth_token = connection.auth_token
     current_version = message.firmwareUpdateCheckRequest.current_version
 
-    response = WebApi.firmware_update_available?( device_id, current_version )
+    response = WebApi.firmware_update_available?( connection.device_id, current_version, auth_token )
     data = {}
 
     type = ProtobufMessages::ApiMessage::Type::FIRMWARE_UPDATE_CHECK_RESPONSE
-    if response.nil? || response.empty?
+    if response.nil? || !response['update_available']
       data[:update_available] = false
     else
       data[:update_available] = true

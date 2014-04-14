@@ -38,15 +38,18 @@ module WebApi
     end
   end
 
-  def self.firmware_update_available?( device_id, version )
+  def self.firmware_update_available?( device_id, version, auth_token )
     begin
-      options = { current_version: version }
+      options = {
+        auth_token: auth_token,
+        current_version: version
+      }
       response = api_get( device_id, 'firmware/check.json', options )
       
-      response['update']
+      response
     rescue
       puts $!.inspect, $@
-      false
+      nil
     end
   end
 
@@ -92,7 +95,9 @@ module WebApi
                   method,
                   url,
                   body: options.to_json,
-                  headers: { 'Content-Type' => 'application/json' } )
+                  headers: {
+                    'Accept' => 'application/json',
+                    'Content-Type' => 'application/json' } )
     p "    Server returned: #{response.code} #{response.body}"
     
     response_json = JSON.parse( response.body )
