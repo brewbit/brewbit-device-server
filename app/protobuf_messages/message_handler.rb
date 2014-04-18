@@ -2,7 +2,6 @@ require 'messages'
 require 'builder'
 require 'sender'
 require 'web_api'
-require 'firmware_serializer'
 
 module MessageHandler
 
