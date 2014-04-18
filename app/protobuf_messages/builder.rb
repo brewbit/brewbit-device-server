@@ -53,7 +53,7 @@ module ProtobufMessages::Builder
     message.type = ProtobufMessages::ApiMessage::Type::FIRMWARE_DOWNLOAD_RESPONSE
     message.firmwareDownloadResponse = ProtobufMessages::FirmwareDownloadResponse.new
     message.firmwareDownloadResponse.offset = data[:offset]
-    message.firmwareDownloadResponse.data = data[:chunk]
+    message.firmwareDownloadResponse.data = data[:data]
 
     message
   end

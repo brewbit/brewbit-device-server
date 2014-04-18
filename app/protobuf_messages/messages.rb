@@ -169,6 +169,8 @@ module ProtobufMessages
 
   class FirmwareDownloadRequest
     required :requested_version, :string, 1
+    required :offset, :uint32, 2
+    required :size, :uint32, 3
   end
 
 
