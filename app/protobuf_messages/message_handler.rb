@@ -137,7 +137,7 @@ module MessageHandler
     else
       data[:update_available] = true
       data[:version] = response["version"]
-      data[:binary_size] = response["size"]
+      data[:binary_size] = response["binary_size"]
     end
 
     response_message = ProtobufMessages::Builder.build( type, data )
