@@ -114,7 +114,7 @@ module MessageHandler
     data = firmware[offset, size]
 
     type = ProtobufMessages::ApiMessage::Type::FIRMWARE_DOWNLOAD_RESPONSE
-    params = { offset: message.offset, data: data }
+    params = { offset: offset, data: data }
     response_message = ProtobufMessages::Builder.build( type, params )
     send_response response_message, connection
   end
