@@ -104,7 +104,6 @@ module ProtobufMessages::Builder
       output.index = o['index']
       output.function = o['function']
       output.cycle_delay = o['cycle_delay']
-      output.output_mode = o['output_mode']
       message.controllerSettings.output_settings << output
     end
 

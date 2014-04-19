@@ -161,8 +161,6 @@ module MessageHandler
       output[:id] =
       output[:function] = o.function
       output[:cycle_delay] = o.cycle_delay
-      output[:sensor] = o.trigger_sensor_id
-      output[:mode] = o.output_mode
 
       device[:outputs] << output
     end
