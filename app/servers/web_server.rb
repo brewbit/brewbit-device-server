@@ -33,7 +33,7 @@ class WebServer < Sinatra::Base
 
     200
   end
-  
+
   post '/devices/:device_id/device_settings' do
     data = JSON.parse(request.body.read)
 
@@ -68,6 +68,15 @@ class WebServer < Sinatra::Base
 
     message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS, data )
     ProtobufMessages::Sender.send message, connection
+
+    200
+  end
+
+  delete '/devices/:device_id' do
+    device_id = params['device_id']
+    halt 400 unless device_id
+
+    DeviceManager.unregister( DeviceManager.find_by_device_id(device_id) )
 
     200
   end
