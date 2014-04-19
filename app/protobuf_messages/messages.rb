@@ -79,17 +79,13 @@ module ProtobufMessages
     end
   end
 
-  class SensorSettings
+  class ControllerSettings
     include Beefcake::Message
 
     module SetpointType
       STATIC = 0
       TEMP_PROFILE = 1
     end
-  end
-
-  class DeviceSettingsNotification
-    include Beefcake::Message
   end
 
   class ApiMessage
@@ -107,7 +103,7 @@ module ProtobufMessages
       FIRMWARE_UPDATE_CHECK_RESPONSE = 9
       FIRMWARE_DOWNLOAD_REQUEST = 10
       FIRMWARE_DOWNLOAD_RESPONSE = 11
-      DEVICE_SETTINGS_NOTIFICATION = 12
+      CONTROLLER_SETTINGS = 12
     end
   end
 
@@ -196,27 +192,21 @@ module ProtobufMessages
 
 
   class OutputSettings
-    required :id, :uint32, 1
+    required :index, :uint32, 1
     required :function, OutputSettings::Function, 2
     required :cycle_delay, :uint32, 3
-    required :trigger_sensor_id, :uint32, 4
-    required :output_mode, OutputSettings::OutputControlMode, 5
+    required :output_mode, OutputSettings::OutputControlMode, 4
   end
 
 
-  class SensorSettings
-    required :id, :uint32, 1
-    required :setpoint_type, SensorSettings::SetpointType, 2
-    optional :static_setpoint, :float, 3
-    optional :temp_profile_id, :uint32, 4
-  end
-
-
-  class DeviceSettingsNotification
+  class ControllerSettings
     required :name, :string, 1
-    repeated :output, OutputSettings, 2
-    repeated :sensor, SensorSettings, 3
-    repeated :temp_profiles, TempProfile, 4
+    required :sensor_index, :uint32, 2
+    required :setpoint_type, ControllerSettings::SetpointType, 3
+    optional :static_setpoint, :float, 4
+    optional :temp_profile_id, :uint32, 5
+    repeated :output_settings, OutputSettings, 6
+    repeated :temp_profiles, TempProfile, 7
   end
 
 
@@ -233,7 +223,7 @@ module ProtobufMessages
     optional :firmwareUpdateCheckResponse, FirmwareUpdateCheckResponse, 10
     optional :firmwareDownloadRequest, FirmwareDownloadRequest, 11
     optional :firmwareDownloadResponse, FirmwareDownloadResponse, 12
-    optional :deviceSettingsNotification, DeviceSettingsNotification, 13
+    optional :controllerSettings, ControllerSettings, 13
   end
 
 end
