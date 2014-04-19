@@ -14,8 +14,8 @@ module ProtobufMessages::Builder
       return build_firmware_download_response data
     when ProtobufMessages::ApiMessage::Type::FIRMWARE_UPDATE_CHECK_RESPONSE
       return build_firmware_update_check_response data
-    when ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS_NOTIFICATION
-      return build_device_settings_notification data
+    when ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS
+      return build_controller_settings_notification data
     end
   end
 
@@ -69,39 +69,33 @@ module ProtobufMessages::Builder
     message
   end
 
-  def self.build_device_settings_notification( data )
+  def self.build_controller_settings_notification( data )
     message = ProtobufMessages::ApiMessage.new
-    message.type = ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS_NOTIFICATION
-    message.deviceSettingsNotification = ProtobufMessages::DeviceSettingsNotification.new
-    message.deviceSettingsNotification.name = data['name']
+    message.type = ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS
+    message.controllerSettings = ProtobufMessages::ControllerSettings.new
+    
+    message.controllerSettings.name = data['name']
+    message.controllerSettings.sensor_index = data['sensor_index']
+    message.controllerSettings.setpoint_type = data['setpoint_type']
 
-    message.deviceSettingsNotification.output = []
-    data['outputs'].each do |o|
+    case message.controllerSettings.setpoint_type
+    when ProtobufMessages::ControllerSettings::SetpointType::STATIC
+      message.controllerSettings.static_setpoint = data['static_setpoint']
+    when ProtobufMessages::ControllerSettings::SetpointType::TEMP_PROFILE
+      message.controllerSettings.temp_profile_id = data['temp_profile_id']
+    end
+
+    message.controllerSettings.output_settings = []
+    data['output_settings'].each do |o|
       output = ProtobufMessages::OutputSettings.new
-      output.id = o['index']
+      output.index = o['index']
       output.function = o['function']
       output.cycle_delay = o['cycle_delay']
-      output.trigger_sensor_id = o['sensor_index']
       output.output_mode = o['output_mode']
-      message.deviceSettingsNotification.output << output
+      message.controllerSettings.output_settings << output
     end
 
-    message.deviceSettingsNotification.sensor = []
-    data['sensors'].each do |s|
-      sensor = ProtobufMessages::SensorSettings.new
-      sensor.id = s['index']
-      sensor.setpoint_type = s['setpoint_type']
-
-      case sensor.setpoint_type
-      when ProtobufMessages::SensorSettings::SetpointType::STATIC
-        sensor.static_setpoint = s['static_setpoint']
-      when ProtobufMessages::SensorSettings::SetpointType::TEMP_PROFILE
-        sensor.temp_profile_id = s['temp_profile_id']
-      end
-      message.deviceSettingsNotification.sensor << sensor
-    end
-
-    message.deviceSettingsNotification.temp_profiles = []
+    message.controllerSettings.temp_profiles = []
     data['temp_profiles'].each do |s|
       temp_profile = ProtobufMessages::TempProfile.new
       temp_profile.id          = s['id']
@@ -117,7 +111,7 @@ module ProtobufMessages::Builder
         temp_profile.steps << temp_profile_step
       end
 
-      message.deviceSettingsNotification.temp_profiles << temp_profile
+      message.controllerSettings.temp_profiles << temp_profile
     end
 
     message
