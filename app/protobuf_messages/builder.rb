@@ -14,8 +14,10 @@ module ProtobufMessages::Builder
       return build_firmware_download_response data
     when ProtobufMessages::ApiMessage::Type::FIRMWARE_UPDATE_CHECK_RESPONSE
       return build_firmware_update_check_response data
+    when ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS
+      return build_device_settings data
     when ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS
-      return build_controller_settings_notification data
+      return build_controller_settings data
     end
   end
 
@@ -69,7 +71,18 @@ module ProtobufMessages::Builder
     message
   end
 
-  def self.build_controller_settings_notification( data )
+  def self.build_device_settings( data )
+    message = ProtobufMessages::ApiMessage.new
+    message.type = ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS
+    message.deviceSettings = ProtobufMessages::DeviceSettings.new
+    
+    message.deviceSettings.name = data['name']
+    message.deviceSettings.control_mode = data['control_mode']
+    
+    message
+  end
+
+  def self.build_controller_settings( data )
     message = ProtobufMessages::ApiMessage.new
     message.type = ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS
     message.controllerSettings = ProtobufMessages::ControllerSettings.new

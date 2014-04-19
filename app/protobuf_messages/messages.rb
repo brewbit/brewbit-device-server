@@ -51,6 +51,15 @@ module ProtobufMessages
     include Beefcake::Message
   end
 
+  class DeviceSettings
+    include Beefcake::Message
+
+    module ControlMode
+      ON_OFF = 0
+      PID = 1
+    end
+  end
+
   class TempProfileStep
     include Beefcake::Message
 
@@ -71,11 +80,6 @@ module ProtobufMessages
       HEATING = 0
       COOLING = 1
       MANUAL = 2
-    end
-
-    module OutputControlMode
-      ON_OFF = 0
-      PID = 1
     end
   end
 
@@ -103,7 +107,8 @@ module ProtobufMessages
       FIRMWARE_UPDATE_CHECK_RESPONSE = 9
       FIRMWARE_DOWNLOAD_REQUEST = 10
       FIRMWARE_DOWNLOAD_RESPONSE = 11
-      CONTROLLER_SETTINGS = 12
+      DEVICE_SETTINGS = 12
+      CONTROLLER_SETTINGS = 13
     end
   end
 
@@ -176,6 +181,12 @@ module ProtobufMessages
   end
 
 
+  class DeviceSettings
+    required :name, :string, 1
+    required :control_mode, DeviceSettings::ControlMode, 2
+  end
+
+
   class TempProfileStep
     required :duration, :uint32, 1
     required :value, :float, 2
@@ -195,7 +206,6 @@ module ProtobufMessages
     required :index, :uint32, 1
     required :function, OutputSettings::Function, 2
     required :cycle_delay, :uint32, 3
-    required :output_mode, OutputSettings::OutputControlMode, 4
   end
 
 
@@ -223,7 +233,8 @@ module ProtobufMessages
     optional :firmwareUpdateCheckResponse, FirmwareUpdateCheckResponse, 10
     optional :firmwareDownloadRequest, FirmwareDownloadRequest, 11
     optional :firmwareDownloadResponse, FirmwareDownloadResponse, 12
-    optional :controllerSettings, ControllerSettings, 13
+    optional :deviceSettings, DeviceSettings, 13
+    optional :controllerSettings, ControllerSettings, 14
   end
 
 end

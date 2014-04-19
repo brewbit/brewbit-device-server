@@ -33,13 +33,32 @@ class WebServer < Sinatra::Base
 
     200
   end
-
-  post '/devices/:device_id/settings' do
+  
+  post '/devices/:device_id/device_settings' do
     data = JSON.parse(request.body.read)
 
     halt 400 if data.nil?
 
     puts "Recieved device settings. Data: #{data.inspect}"
+
+    device_id = params['device_id']
+    halt 400 unless device_id
+
+    connection = DeviceManager.find_by_device_id device_id
+    halt 404 unless connection
+
+    message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS, data )
+    ProtobufMessages::Sender.send message, connection
+
+    200
+  end
+
+  post '/devices/:device_id/controller_settings' do
+    data = JSON.parse(request.body.read)
+
+    halt 400 if data.nil?
+
+    puts "Recieved controller settings. Data: #{data.inspect}"
 
     device_id = params['device_id']
     halt 400 unless device_id
