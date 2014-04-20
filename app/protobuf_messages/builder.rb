@@ -75,10 +75,11 @@ module ProtobufMessages::Builder
     message = ProtobufMessages::ApiMessage.new
     message.type = ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS
     message.deviceSettings = ProtobufMessages::DeviceSettings.new
-    
+
     message.deviceSettings.name = data['name']
     message.deviceSettings.control_mode = data['control_mode']
-    
+    message.deviceSettings.hysteresis = data['hysteresis']
+
     message
   end
 
@@ -86,7 +87,7 @@ module ProtobufMessages::Builder
     message = ProtobufMessages::ApiMessage.new
     message.type = ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS
     message.controllerSettings = ProtobufMessages::ControllerSettings.new
-    
+
     message.controllerSettings.name = data['name']
     message.controllerSettings.sensor_index = data['sensor_index']
     message.controllerSettings.setpoint_type = data['setpoint_type']
@@ -119,7 +120,7 @@ module ProtobufMessages::Builder
         temp_profile_step.duration = st['duration']
         temp_profile_step.value    = st['value']
         temp_profile_step.type     = st['type']
-        
+
         temp_profile.steps << temp_profile_step
       end
 

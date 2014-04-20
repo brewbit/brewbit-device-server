@@ -184,6 +184,7 @@ module ProtobufMessages
   class DeviceSettings
     required :name, :string, 1
     required :control_mode, DeviceSettings::ControlMode, 2
+    required :hysteresis, :float, 3
   end
 
 
