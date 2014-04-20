@@ -28,9 +28,11 @@ module MessageHandler
       firmware_download_request message, connection
     when ProtobufMessages::ApiMessage::Type::FIRMWARE_UPDATE_CHECK_REQUEST
       firmware_update_check_request message, connection
-    when ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS_NOTIFICATION
-      device_settings_notification message, connection
+    when ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS
+      controller_settings_notification message, connection
     end
+
+    #TODO rescue, log & return
   end
 
   private
@@ -144,38 +146,34 @@ module MessageHandler
     send_response response_message, connection
   end
 
-  def self.device_settings_notification( message, connection )
+  def self.controller_settings_notification( message, connection )
     p 'Process Device Settings Notification'
     p "    Message: #{message.inspect}"
 
     return if !connection.authenticated
 
+    auth_token = connection.auth_token
     device_id = connection.device_id
 
-    device = { outputs: [], sensors: []}
+    data = {
+      auth_token: auth_token,
+      name: message.controllerSettings.name,
+      sensor_index: message.controllerSettings.sensor_index,
+      setpoint_type: message.controllerSettings.setpoint_type,
+      static_setpoint: message.controllerSettings.static_setpoint,
+      temp_profile_id: message.controllerSettings.temp_profile_id,
+      output_settings: []
+    }
 
-    device[:name] = message.deviceSettingsNotification.name
-
-    message.deviceSettingsNotification.output.each do |o|
-      output = {}
-      output[:id] =
-      output[:function] = o.function
-      output[:cycle_delay] = o.cycle_delay
-
-      device[:outputs] << output
+    message.controllerSettings.output_settings.each do |o|
+      data[:output_settings] << {
+        index:        o.index,
+        function:     o.function,
+        cycle_delay:  o.cycle_delay
+      }
     end
 
-    message.deviceSettingsNotification.sensor.each do |s|
-      sensor = {}
-      sensor[:id] = s.id
-      sensor[:setpoitn_type] = s.setpoint_type
-      sensor[:static_setpoint] = s.static_setpoint
-      sensor[:temp_profile_id] = s.temp_profile_id
-
-      device[:sensors] << sensor
-    end
-
-    WebApi.send_device_settings( device_id, device )
+    WebApi.send_controller_settings( device_id, data )
   end
 
   private

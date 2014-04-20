@@ -6,7 +6,7 @@ class MessageParser
     @state = :length
     @bytes_remaining = 4
   end
-  
+
   def consume(data)
     while data.length > 0
       length = (data.length > @bytes_remaining ? @bytes_remaining : data.length)

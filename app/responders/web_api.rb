@@ -8,9 +8,9 @@ module WebApi
     begin
       response = api_get( device_id, "activation/new.json" )
       token = response["activation_token"]
-      
+
       raise if token.empty?
-      
+
       token
     rescue
       puts $!.inspect, $@
@@ -45,7 +45,7 @@ module WebApi
         current_version: version
       }
       response = api_get( device_id, 'firmware/check.json', options )
-      
+
       response
     rescue
       puts $!.inspect, $@
@@ -69,22 +69,22 @@ module WebApi
     end
   end
 
-  def self.send_device_settings( device_id, options )
+  def self.send_controller_settings( device_id, options )
     begin
-      response = api_post( device_id, 'settings.json', options )
+      response = api_post( device_id, 'controller_settings.json', options )
       true
     rescue
       puts $!.inspect, $@
       nil
     end
   end
-  
+
   private
-  
+
   def self.api_get( device_id, path, options = {} )
     api_send( :get, device_id, path, options )
   end
-  
+
   def self.api_post( device_id, path, options = {} )
     api_send( :post, device_id, path, options )
   end
@@ -93,7 +93,7 @@ module WebApi
     url = "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}"
     p "Sending request to #{url}"
     p "    #{options.inspect}"
-    
+
     response = HTTParty.send(
                   method,
                   url,
@@ -102,15 +102,15 @@ module WebApi
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json' } )
     p "    Server returned: #{response.code} #{response.body}"
-    
+
     response_json = JSON.parse( response.body )
-    
+
     if response.code != 200
       message = response_json['message']
       p "Request failed: #{message}"
       raise message
     end
-    
+
     response_json
   end
 end
