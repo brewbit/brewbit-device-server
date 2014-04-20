@@ -21,13 +21,13 @@ class WebServer < Sinatra::Base
     halt 400 unless auth_token
 
     connections = DeviceManager.find_all_by_device_id device_id
-    halt 404 unless connections
+    halt 404 unless connections.any?
+
+    message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::ACTIVATION_NOTIFICATION, auth_token )
 
     connections.each do |connection|
       connection.auth_token = auth_token
       connection.authenticated = true
-
-      message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::ACTIVATION_NOTIFICATION, auth_token )
       ProtobufMessages::Sender.send message, connection
     end
 
@@ -44,11 +44,8 @@ class WebServer < Sinatra::Base
     device_id = params['device_id']
     halt 400 unless device_id
 
-    connection = DeviceManager.find_by_device_id device_id
-    halt 404 unless connection
-
     message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::DEVICE_SETTINGS, data )
-    ProtobufMessages::Sender.send message, connection
+    send_to_all device_id, message
 
     200
   end
@@ -63,11 +60,8 @@ class WebServer < Sinatra::Base
     device_id = params['device_id']
     halt 400 unless device_id
 
-    connection = DeviceManager.find_by_device_id device_id
-    halt 404 unless connection
-
     message = ProtobufMessages::Builder.build( ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS, data )
-    ProtobufMessages::Sender.send message, connection
+    send_to_all device_id, message
 
     200
   end
@@ -76,9 +70,18 @@ class WebServer < Sinatra::Base
     device_id = params['device_id']
     halt 400 unless device_id
 
-    DeviceManager.unregister( DeviceManager.find_by_device_id(device_id) )
+    DeviceManager.unregister_all( device_id )
 
     200
+  end
+  
+  def send_to_all(device_id, message)
+    connections = DeviceManager.find_all_by_device_id device_id
+    halt 404 unless connections.any?
+    
+    connections.each do |connection|
+      ProtobufMessages::Sender.send message, connection
+    end
   end
 end
 
