@@ -8,7 +8,7 @@ class DeviceConnection < EM::Connection
   attr_accessor :authenticated
 
   def post_init
-    p "Connected #{Time.now}"
+    Log.debug "Connected #{Time.now}"
 
     @device_id = nil
     @auth_token = nil
@@ -19,10 +19,10 @@ class DeviceConnection < EM::Connection
     DeviceManager.register self
     @timer = EM.add_periodic_timer(10) { tick }
   end
-  
+
   def tick
     time_since_last_recv = Time.now.to_i - @last_recv.to_i
-    p "Tick #{time_since_last_recv} ..."
+    Log.debug "Tick #{time_since_last_recv} ..."
     if (time_since_last_recv) > 15
       close_connection
     else
@@ -32,7 +32,7 @@ class DeviceConnection < EM::Connection
   end
 
   def unbind
-    p "Closed #{Time.now}"
+    Log.debug "Closed #{Time.now}"
 
     @timer.cancel
     @authenticated = false
@@ -40,7 +40,7 @@ class DeviceConnection < EM::Connection
   end
 
   def receive_data( data )
-    p "Data: #{data}"
+    Log.debug "Data: #{data.inspect}"
     @last_recv = Time.now
     @parser.consume data
   end

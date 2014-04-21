@@ -1,4 +1,5 @@
 require 'rubygems'
+require 'log4r'
 
 ROOT_PATH = File.dirname(__FILE__)
 
@@ -15,4 +16,22 @@ $LOAD_PATH << File.join( ROOT_PATH, '.' )
 $LOAD_PATH.unshift *Dir.glob( File.expand_path( './app/**/*' ) )
 $LOAD_PATH << File.join( ROOT_PATH, 'app' )
 $LOAD_PATH << File.join( ROOT_PATH, 'lib' )
+
+Log = Log4r::Logger.new( 'device_server' )
+Log.level = Log4r::DEBUG
+
+MEGABYTE = 1024 * 1024
+MAX_LOG_SIZE = 60 * MEGABYTE
+config = {
+  filename:     "log/device_server.log",
+  maxsize:      MAX_LOG_SIZE,
+  max_backups:  2,
+  trunc:        true
+}
+rolling_outputter = Log4r::RollingFileOutputter.new( 'device_server', config )
+format = Log4r::PatternFormatter.new( :pattern => "[%l] %d :: %m",
+                                      :date_pattern => "%a %d %b %H:%M %p %Y" )
+rolling_outputter.formatter = format
+
+Log.add rolling_outputter
 

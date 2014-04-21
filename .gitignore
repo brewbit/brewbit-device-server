@@ -1,3 +1,4 @@
 .vagrant
 tags
 coverage
+log/*.log

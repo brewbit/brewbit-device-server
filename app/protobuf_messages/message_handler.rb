@@ -11,11 +11,11 @@ module MessageHandler
   class UnknownDevice < Exception ; end
 
   def self.handle( connection, msg )
-    p "Processing Message from #{connection.device_id}"
-    p "    raw message: #{msg.inspect}"
+    Log.debug "Processing Message from #{connection.device_id}"
+    Log.debug "    raw message: #{msg.inspect}"
 
     message = ProtobufMessages::ApiMessage.decode( msg )
-    p "    decoded message: #{message.inspect}"
+    Log.debug "    decoded message: #{message.inspect}"
 
     case message.type
     when ProtobufMessages::ApiMessage::Type::ACTIVATION_TOKEN_REQUEST
@@ -38,8 +38,8 @@ module MessageHandler
   private
 
   def self.activation_token_request( message, connection )
-    p 'Processing Activation Token Request'
-    p "    Message: #{message.inspect}"
+    Log.debug 'Processing Activation Token Request'
+    Log.debug "    Message: #{message.inspect}"
 
     device_id = message.activationTokenRequest.device_id
     connection.device_id = device_id
@@ -54,8 +54,8 @@ module MessageHandler
   def self.auth_request( message, connection )
     raise MissingAuthToken if message.authRequest.auth_token.nil? || message.authRequest.auth_token.empty?
 
-    p 'Processing Auth Request'
-    p "    Message: #{message.inspect}"
+    Log.debug 'Processing Auth Request'
+    Log.debug "    Message: #{message.inspect}"
 
     device_id = message.authRequest.device_id
     auth_token = message.authRequest.auth_token
@@ -75,8 +75,8 @@ module MessageHandler
 
     return if !connection.authenticated
 
-    p 'Process Device Report'
-    p "    Message: #{message.inspect}"
+    Log.debug 'Process Device Report'
+    Log.debug "    Message: #{message.inspect}"
 
     auth_token = connection.auth_token
     device_id = connection.device_id
@@ -96,8 +96,8 @@ module MessageHandler
   end
 
   def self.firmware_download_request( message, connection )
-    p 'Process Firmware Download Request'
-    p "    Message: #{message.inspect}"
+    Log.debug 'Process Firmware Download Request'
+    Log.debug "    Message: #{message.inspect}"
 
     return if !connection.authenticated
 
@@ -122,8 +122,8 @@ module MessageHandler
   end
 
   def self.firmware_update_check_request( message, connection )
-    p 'Process Firmware Update Check Request'
-    p "    Message: #{message.inspect}"
+    Log.debug 'Process Firmware Update Check Request'
+    Log.debug "    Message: #{message.inspect}"
 
     return if !connection.authenticated
 
@@ -147,8 +147,8 @@ module MessageHandler
   end
 
   def self.controller_settings_notification( message, connection )
-    p 'Process Device Settings Notification'
-    p "    Message: #{message.inspect}"
+    Log.debug 'Process Device Settings Notification'
+    Log.debug "    Message: #{message.inspect}"
 
     return if !connection.authenticated
 
