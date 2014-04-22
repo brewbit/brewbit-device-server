@@ -165,12 +165,14 @@ module MessageHandler
       output_settings: []
     }
 
-    message.controllerSettings.output_settings.each do |o|
-      data[:output_settings] << {
-        index:        o.index,
-        function:     o.function,
-        cycle_delay:  o.cycle_delay
-      }
+    unless message.controllerSettings.output_settings.nil?
+      message.controllerSettings.output_settings.each do |o|
+        data[:output_settings] << {
+          index:        o.index,
+          function:     o.function,
+          cycle_delay:  o.cycle_delay
+        }
+      end
     end
 
     WebApi.send_controller_settings( device_id, data )
