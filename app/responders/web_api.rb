@@ -91,8 +91,8 @@ module WebApi
 
   def self.api_send( method, device_id, path, options )
     url = "#{BREWBIT_API_URL}/v#{API_VERSION}/devices/#{device_id}/#{path}"
-    p "Sending request to #{url}"
-    p "    #{options.inspect}"
+    Log.debug "Sending request to #{url}"
+    Log.debug "    #{options.inspect}"
 
     response = HTTParty.send(
                   method,
@@ -101,13 +101,13 @@ module WebApi
                   headers: {
                     'Accept' => 'application/json',
                     'Content-Type' => 'application/json' } )
-    p "    Server returned: #{response.code} #{response.body}"
+    Log.debug "    Server returned: #{response.code} #{response.body}"
 
     response_json = JSON.parse( response.body )
 
     if response.code != 200
       message = response_json['message']
-      p "Request failed: #{message}"
+      Log.debug "Request failed: #{message}"
       raise message
     end
 

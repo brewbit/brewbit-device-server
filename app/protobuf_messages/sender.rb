@@ -20,9 +20,9 @@ module ProtobufMessages::Sender
   def self.send_message( message, connection )
     data = serialize_message( message )
 
-    p 'Sending Message'
-    p "    Message: #{message.inspect}"
-    p "    Data: #{data}"
+    Log.debug 'Sending Message'
+    Log.debug "    Message: #{message.inspect}"
+    Log.debug "    Data: #{data.inspect}"
 
     # TODO use mutex to lock use of socket?
     connection.send_data data
