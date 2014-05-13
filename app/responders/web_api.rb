@@ -13,7 +13,8 @@ module WebApi
 
       token
     rescue
-      Log.error $!.inspect, $@
+      Log.error $!.inspect
+      Log.error $@
       nil
     end
   end
@@ -23,7 +24,8 @@ module WebApi
       api_get( device_id, "auth/new.json", { auth_token: auth_token } )
       true
     rescue
-      Log.error $!.inspect, $@
+      Log.error $!.inspect
+      Log.error $@
       false
     end
   end
@@ -33,7 +35,8 @@ module WebApi
       api_post( device_id, 'reports', options )
       true
     rescue
-      Log.error $!.inspect, $@
+      Log.error $!.inspect
+      Log.error $@
       false
     end
   end
@@ -48,7 +51,8 @@ module WebApi
 
       response
     rescue
-      Log.error $!.inspect, $@
+      Log.error $!.inspect
+      Log.error $@
       nil
     end
   end
@@ -65,7 +69,8 @@ module WebApi
       response = api_get( device_id, 'firmware/show.json', options )
       Base64.decode64(response['data'])
     rescue
-      Log.error $!.inspect, $@
+      Log.error $!.inspect
+      Log.error $@
       nil
     end
   end
@@ -75,7 +80,8 @@ module WebApi
       response = api_post( device_id, 'controller_settings.json', options )
       true
     rescue
-      Log.error $!.inspect, $@
+      Log.error $!.inspect
+      Log.error $@
       nil
     end
   end
