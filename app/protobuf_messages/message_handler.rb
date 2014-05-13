@@ -107,13 +107,8 @@ module MessageHandler
     offset = message.firmwareDownloadRequest.offset
     size = message.firmwareDownloadRequest.size
 
-    # TODO cache the firmware locally instead of re-requesting the WHOLE image
-    #      each time the client asks for a chunk... Or add offset/size params
-    #      to the web api...
-    firmware = WebApi.get_firmware( device_id, version, auth_token )
-    return if firmware.nil? || firmware.empty?
-
-    data = firmware[offset, size]
+    data = WebApi.get_firmware( device_id, version, offset, size, auth_token )
+    return if data.nil? || data.empty?
 
     type = ProtobufMessages::ApiMessage::Type::FIRMWARE_DOWNLOAD_RESPONSE
     params = { offset: offset, data: data }
