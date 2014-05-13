@@ -12,7 +12,7 @@ class WebServer < Sinatra::Base
 
     halt 400 if data.nil?
 
-    puts "Recieved JSON Data: #{data.inspect}"
+    Log.debug "Recieved JSON Data: #{data.inspect}"
 
     device_id = params['device_id']
     halt 400 unless device_id
@@ -39,7 +39,7 @@ class WebServer < Sinatra::Base
 
     halt 400 if data.nil?
 
-    puts "Recieved device settings. Data: #{data.inspect}"
+    Log.debug "Recieved device settings. Data: #{data.inspect}"
 
     device_id = params['device_id']
     halt 400 unless device_id
@@ -55,7 +55,7 @@ class WebServer < Sinatra::Base
 
     halt 400 if data.nil?
 
-    puts "Recieved controller settings. Data: #{data.inspect}"
+    Log.debug "Recieved controller settings. Data: #{data.inspect}"
 
     device_id = params['device_id']
     halt 400 unless device_id

@@ -7,9 +7,9 @@ require 'thin'
 require 'device_connection'
 require 'web_server'
 
-puts "Starting device server on #{HOST}:#{DEVICE_PORT}"
-puts "Starting web server on #{HOST}:#{WEB_PORT}"
-puts "Using brewbit API at #{BREWBIT_API_HOST}"
+Log.info "Starting device server on #{HOST}:#{DEVICE_PORT}"
+Log.info "Starting web server on #{HOST}:#{WEB_PORT}"
+Log.info "Using brewbit API at #{BREWBIT_API_HOST}"
 
 EventMachine::run {
   Signal.trap("INT")  { EventMachine.stop }

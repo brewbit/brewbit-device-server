@@ -8,7 +8,7 @@ class DeviceConnection < EM::Connection
   attr_accessor :authenticated
 
   def post_init
-    Log.debug "Connected #{Time.now}"
+    Log.debug "Device connected"
 
     @device_id = nil
     @auth_token = nil
@@ -22,7 +22,7 @@ class DeviceConnection < EM::Connection
 
   def tick
     time_since_last_recv = Time.now.to_i - @last_recv.to_i
-    Log.debug "Tick #{time_since_last_recv} ..."
+    Log.debug "Tick #{device_id} #{time_since_last_recv} ..."
     if (time_since_last_recv) > 15
       close_connection
     else
@@ -32,7 +32,7 @@ class DeviceConnection < EM::Connection
   end
 
   def unbind
-    Log.debug "Closed #{Time.now}"
+    Log.debug "Closed connection to #{device_id}"
 
     @timer.cancel
     @authenticated = false
@@ -40,12 +40,20 @@ class DeviceConnection < EM::Connection
   end
 
   def receive_data( data )
-    Log.debug "Data: #{data.inspect}"
+    Log.debug "Data from #{device_id}: #{data.inspect}"
     @last_recv = Time.now
     @parser.consume data
   end
 
   def dispatch_msg( payload )
-    MessageHandler.handle self, payload
+    begin
+      MessageHandler.handle self, payload
+    rescue
+      Log.error "Message handler error for #{device_id}"
+      Log.error $!.inspect
+      Log.error $@
+      
+      close_connection
+    end
   end
 end
