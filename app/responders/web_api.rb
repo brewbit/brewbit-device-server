@@ -3,28 +3,35 @@ require 'json'
 
 module WebApi
   include HTTParty
+  
+  class ApiError < StandardError
+    attr_reader :response_code
 
-  def self.get_activation_token( device_id )
-    begin
-      response = api_get( device_id, "activation/new.json" )
-      token = response["activation_token"]
-
-      raise if token.empty?
-
-      token
-    rescue
-      Log.error $!.inspect
-      Log.error $@
-      nil
+    def initialize(response_code)
+      @response_code = response_code
     end
   end
 
+  def self.get_activation_token( device_id )
+    response = api_get( device_id, "activation/new.json" )
+    token = response["activation_token"]
+
+    raise if token.nil? || token.empty?
+
+    token
+  end
+
   def self.authenticate( device_id, auth_token )
-    # When an auth exception occurs, we want to drop the device connection
-    # so we let any exception be handled in the device connection class
-    # where that will occur
-    api_get( device_id, "auth/new.json", { auth_token: auth_token } )
-    true
+    begin
+      api_get( device_id, "auth/new.json", { auth_token: auth_token } )
+      true
+    rescue ApiError => e
+      if e.response_code == 401
+        false
+      else
+        raise        
+      end
+    end
   end
 
   def self.send_device_report( device_id, options )
@@ -112,7 +119,7 @@ module WebApi
     if response.code != 200
       message = response_json['message']
       Log.debug "Request failed: #{message}"
-      raise message
+      raise ApiError.new(response.code), message
     end
 
     response_json
