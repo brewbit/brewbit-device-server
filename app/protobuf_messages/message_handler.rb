@@ -31,8 +31,6 @@ module MessageHandler
     when ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS
       controller_settings_notification message, connection
     end
-
-    #TODO rescue, log & return
   end
 
   private

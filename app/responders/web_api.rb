@@ -20,14 +20,11 @@ module WebApi
   end
 
   def self.authenticate( device_id, auth_token )
-    begin
-      api_get( device_id, "auth/new.json", { auth_token: auth_token } )
-      true
-    rescue
-      Log.error $!.inspect
-      Log.error $@
-      false
-    end
+    # When an auth exception occurs, we want to drop the device connection
+    # so we let any exception be handled in the device connection class
+    # where that will occur
+    api_get( device_id, "auth/new.json", { auth_token: auth_token } )
+    true
   end
 
   def self.send_device_report( device_id, options )
