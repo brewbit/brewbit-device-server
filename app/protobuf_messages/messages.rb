@@ -142,6 +142,7 @@ module ProtobufMessages
     required :controller_index, :uint32, 1
     required :sensor_reading, :float, 2
     required :setpoint, :float, 3
+    optional :timestamp, :uint32, 4
   end
 
 

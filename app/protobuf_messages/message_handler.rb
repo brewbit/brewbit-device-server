@@ -85,7 +85,8 @@ module MessageHandler
         message.deviceReport.controller_reports.collect { |report| {
           controller_index: report.controller_index,
           sensor_reading:   report.sensor_reading,
-          setpoint:         report.setpoint
+          setpoint:         report.setpoint,
+          timestamp:        report.timestamp
         }
       }
     }
