@@ -47,7 +47,9 @@ class DeviceConnection < EM::Connection
 
   def dispatch_msg( payload )
     begin
-      MessageHandler.handle self, payload
+      if payload.length > 0
+        MessageHandler.handle self, payload
+      end
     rescue
       Log.error "Message handler error for #{device_id} #{payload.unpack('C*')}"
       Log.error $!.inspect
