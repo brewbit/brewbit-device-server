@@ -49,7 +49,7 @@ class DeviceConnection < EM::Connection
     begin
       MessageHandler.handle self, payload
     rescue
-      Log.error "Message handler error for #{device_id} '#{payload.inspect}'"
+      Log.error "Message handler error for #{device_id} #{payload.unpack('C*')}"
       Log.error $!.inspect
       Log.error $@
       
