@@ -2,7 +2,7 @@ class MessageParser
   def initialize(handler)
     @handler = handler
 
-    @buffer = ""
+    @buffer = "".force_encoding('BINARY')
     @state = :length
     @bytes_remaining = 4
   end
@@ -28,7 +28,7 @@ class MessageParser
 
           @handler.dispatch_msg @buffer
         end
-        @buffer = ""
+        @buffer = "".force_encoding('BINARY')
       end
     end
   end

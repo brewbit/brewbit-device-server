@@ -40,6 +40,7 @@ class DeviceConnection < EM::Connection
   end
 
   def receive_data( data )
+    data.force_encoding('BINARY')
     Log.debug "Data from #{device_id}: #{data.inspect}"
     @last_recv = Time.now
     @parser.consume data
