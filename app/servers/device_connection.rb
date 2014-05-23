@@ -23,7 +23,7 @@ class DeviceConnection < EM::Connection
   def tick
     time_since_last_recv = Time.now.to_i - @last_recv.to_i
     Log.debug "Tick #{device_id} #{time_since_last_recv} ..."
-    if (time_since_last_recv) > 15
+    if (time_since_last_recv) > 60
       close_connection
     else
       # send keepalive
