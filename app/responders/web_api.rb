@@ -26,7 +26,7 @@ module WebApi
       api_get( device_id, "auth/new.json", { auth_token: auth_token } )
       true
     rescue ApiError => e
-      if e.response_code == 401
+      if e.response_code == 401 || e.response_code == 404
         false
       else
         raise        
