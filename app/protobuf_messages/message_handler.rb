@@ -14,7 +14,7 @@ module MessageHandler
     Log.debug "Processing Message from #{connection.device_id}"
     Log.debug "    raw message: #{msg.inspect}"
 
-    message = ProtobufMessages::ApiMessage.decode( msg )
+    message = ProtobufMessages::ApiMessage.decode( msg.dup )
     Log.debug "    decoded message: #{message.inspect}"
 
     case message.type
