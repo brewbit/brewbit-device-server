@@ -8,6 +8,7 @@ class MessageParser
   end
 
   def consume(data)
+    data.force_encoding('BINARY')
     while data.length > 0
       length = (data.length > @bytes_remaining ? @bytes_remaining : data.length)
       @buffer += data[0..length]
