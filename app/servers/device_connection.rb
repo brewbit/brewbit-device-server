@@ -26,9 +26,15 @@ class DeviceConnection < EM::Connection
     if (time_since_last_recv) > 60
       close_connection
     else
-      # send keepalive
-      send_data [0].pack('N')
+      send_timestamp
     end
+  end
+
+  def send_timestamp
+    data = Time.now.to_i
+    type = ProtobufMessages::ApiMessage::Type::SERVER_TIME
+    message = ProtobufMessages::Builder.build( type, data )
+    ProtobufMessages::Sender.send( message, self )
   end
 
   def unbind

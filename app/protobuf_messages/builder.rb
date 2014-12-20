@@ -18,6 +18,8 @@ module ProtobufMessages::Builder
       return build_device_settings data
     when ProtobufMessages::ApiMessage::Type::CONTROLLER_SETTINGS
       return build_controller_settings data
+    when ProtobufMessages::ApiMessage::Type::SERVER_TIME
+      return build_server_time data
     end
   end
 
@@ -127,6 +129,14 @@ module ProtobufMessages::Builder
       message.controllerSettings.temp_profiles << temp_profile
     end
 
+    message
+  end
+
+  def self.build_server_time( data )
+    message = ProtobufMessages::ApiMessage.new
+    message.type = ProtobufMessages::ApiMessage::Type::SERVER_TIME
+    message.serverTime = ProtobufMessages::ServerTime.new
+    message.serverTime.timestamp = data
     message
   end
 end
