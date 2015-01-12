@@ -3,6 +3,10 @@ require "beefcake"
 
 module ProtobufMessages
 
+  class ServerTime
+    include Beefcake::Message
+  end
+
   class ActivationTokenRequest
     include Beefcake::Message
   end
@@ -109,8 +113,14 @@ module ProtobufMessages
       FIRMWARE_DOWNLOAD_RESPONSE = 11
       DEVICE_SETTINGS = 12
       CONTROLLER_SETTINGS = 13
+      SERVER_TIME = 14
     end
   end
+
+  class ServerTime
+    required :timestamp, :int32, 1
+  end
+
 
   class ActivationTokenRequest
     required :device_id, :string, 1
@@ -237,6 +247,7 @@ module ProtobufMessages
     optional :firmwareDownloadResponse, FirmwareDownloadResponse, 12
     optional :deviceSettings, DeviceSettings, 13
     optional :controllerSettings, ControllerSettings, 14
+    optional :serverTime, ServerTime, 15
   end
 
 end
