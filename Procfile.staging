@@ -1,1 +1,1 @@
-app:   cd /var/www/dg.staging.brewbit.com/current && ( BREWBIT_API_HOST=staging.brewbit.com bundle exec ./server.rb )
+app: BREWBIT_API_HOST=staging.brewbit.com bundle exec ./server.rb
