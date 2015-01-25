@@ -94,6 +94,11 @@ module ProtobufMessages
       STATIC = 0
       TEMP_PROFILE = 1
     end
+
+    module CompletionAction
+      HOLD_LAST = 0
+      START_OVER = 1
+    end
   end
 
   class ApiMessage
@@ -227,6 +232,8 @@ module ProtobufMessages
     required :setpoint_type, ControllerSettings::SetpointType, 3
     optional :static_setpoint, :float, 4
     optional :temp_profile_id, :uint32, 5
+    optional :temp_profile_start_point, :int32, 8
+    optional :temp_profile_completion_action, ControllerSettings::CompletionAction, 9
     repeated :output_settings, OutputSettings, 6
     repeated :temp_profiles, TempProfile, 7
   end

@@ -99,6 +99,8 @@ module ProtobufMessages::Builder
       message.controllerSettings.static_setpoint = data['static_setpoint']
     when ProtobufMessages::ControllerSettings::SetpointType::TEMP_PROFILE
       message.controllerSettings.temp_profile_id = data['temp_profile_id']
+      message.controllerSettings.temp_profile_start_point = data['temp_profile_start_point']
+      message.controllerSettings.temp_profile_completion_action = data['temp_profile_completion_action']
     end
 
     message.controllerSettings.output_settings = []
