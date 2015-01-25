@@ -1,1 +1,0 @@
-app: BREWBIT_API_HOST=staging.brewbit.com bundle exec ./server.rb
