@@ -27,6 +27,10 @@ module ProtobufMessages
     include Beefcake::Message
   end
 
+  class OutputStatus
+    include Beefcake::Message
+  end
+
   class ControllerReport
     include Beefcake::Message
   end
@@ -153,11 +157,21 @@ module ProtobufMessages
   end
 
 
+  class OutputStatus
+    optional :output_index, :uint32, 1
+    optional :status, :bool, 2
+    optional :kp, :float, 3
+    optional :ki, :float, 4
+    optional :kd, :float, 5
+  end
+
+
   class ControllerReport
     required :controller_index, :uint32, 1
     required :sensor_reading, :float, 2
     required :setpoint, :float, 3
     optional :timestamp, :uint32, 4
+    repeated :output_status, OutputStatus, 5
   end
 
 

@@ -86,7 +86,16 @@ module MessageHandler
           controller_index: report.controller_index,
           sensor_reading:   report.sensor_reading,
           setpoint:         report.setpoint,
-          timestamp:        report.timestamp
+          timestamp:        report.timestamp,
+          output_status: report.output_status.nil? ? nil :
+            report.output_status.collect { |os| {
+              output_index: os.output_index,
+              status: os.status,
+              kp: os.kp,
+              ki: os.ki,
+              kd: os.kd
+            }
+          }
         }
       }
     }
