@@ -161,6 +161,7 @@ module MessageHandler
     data = {
       auth_token: auth_token,
       name: message.controllerSettings.name,
+      session_action: message.controllerSettings.session_action,
       sensor_index: message.controllerSettings.sensor_index,
       setpoint_type: message.controllerSettings.setpoint_type,
       static_setpoint: message.controllerSettings.static_setpoint,

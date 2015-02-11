@@ -103,6 +103,11 @@ module ProtobufMessages
       HOLD_LAST = 0
       START_OVER = 1
     end
+
+    module SessionAction
+      CREATE_SESSION = 0
+      EDIT_SESSION = 1
+    end
   end
 
   class ApiMessage
@@ -242,6 +247,7 @@ module ProtobufMessages
 
   class ControllerSettings
     required :name, :string, 1
+    optional :session_action, ControllerSettings::SessionAction, 10
     required :sensor_index, :uint32, 2
     required :setpoint_type, ControllerSettings::SetpointType, 3
     optional :static_setpoint, :float, 4
