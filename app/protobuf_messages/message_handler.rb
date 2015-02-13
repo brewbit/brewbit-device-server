@@ -166,13 +166,15 @@ module MessageHandler
       setpoint_type: message.controllerSettings.setpoint_type,
       static_setpoint: message.controllerSettings.static_setpoint,
       temp_profile_id: message.controllerSettings.temp_profile_id,
-      output_settings: []
+      temp_profile_completion_action: message.controllerSettings.temp_profile_completion_action,
+      temp_profile_start_point: message.controllerSettings.temp_profile_start_point
     }
 
     unless message.controllerSettings.output_settings.nil?
+      data[:output_settings_attributes] = []
       message.controllerSettings.output_settings.each do |o|
-        data[:output_settings] << {
-          index:        o.index,
+        data[:output_settings_attributes] << {
+          output_index: o.index,
           function:     o.function,
           cycle_delay:  o.cycle_delay
         }
