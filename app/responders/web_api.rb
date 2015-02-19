@@ -21,9 +21,9 @@ module WebApi
     token
   end
 
-  def self.authenticate( device_id, auth_token )
+  def self.authenticate( device_id, options )
     begin
-      api_get( device_id, "auth/new.json", { auth_token: auth_token } )
+      api_get( device_id, "auth/new.json", options )
       true
     rescue ApiError => e
       if e.response_code == 401 || e.response_code == 404

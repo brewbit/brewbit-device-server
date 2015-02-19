@@ -60,8 +60,13 @@ module MessageHandler
 
     connection.device_id = device_id
     connection.auth_token = auth_token
+    
+    options = {
+      auth_token: auth_token,
+      firmware_version: message.authRequest.firmware_version
+    }
 
-    connection.authenticated = WebApi.authenticate( device_id, auth_token )
+    connection.authenticated = WebApi.authenticate( device_id, options )
     type = ProtobufMessages::ApiMessage::Type::AUTH_RESPONSE
     response_message = ProtobufMessages::Builder.build( type, connection.authenticated )
 

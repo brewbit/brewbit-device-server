@@ -154,6 +154,7 @@ module ProtobufMessages
   class AuthRequest
     required :device_id, :string, 1
     required :auth_token, :string, 2
+    optional :firmware_version, :string, 3
   end
 
 
