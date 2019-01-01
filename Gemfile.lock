@@ -21,7 +21,7 @@ GEM
       eventmachine
       rspec (> 2.6.0)
       test-unit
-    eventmachine (1.0.3)
+    eventmachine (1.0.9.1)
     factory_girl (4.2.0)
       activesupport (>= 3.0.0)
     ffi (1.9.3)
