@@ -1,1 +1,3 @@
-TODO
+The brewbit-device-server acts as an intermediary between the Model-T device and the web dashboard, so that statistics and setpoints can be exchanged back and forth. The device server speaks to the Model-T using [Protocol Buffers](https://en.wikipedia.org/wiki/Protocol_Buffers) and to the dashboard using JSON.
+
+To launch the full suite of BrewBit backend services using Docker Compose, see [brewbit/brewbit.com](https://github.com/brewbit/brewbit.com).
